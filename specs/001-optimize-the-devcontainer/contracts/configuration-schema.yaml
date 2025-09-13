@@ -1,0 +1,280 @@
+# DevContainer Configuration Schema
+# Defines the contract for the optimized DevContainer configuration system
+
+openapi: 3.0.3
+info:
+  title: DevContainer Configuration API
+  description: Configuration schema for multi-project DevContainer optimization
+  version: 1.0.0
+
+components:
+  schemas:
+    WorkspaceConfiguration:
+      type: object
+      required:
+        - name
+        - baseImage
+        - machineProfile
+      properties:
+        name:
+          type: string
+          pattern: '^[a-zA-Z0-9][a-zA-Z0-9-_]*[a-zA-Z0-9]$'
+          description: Workspace identifier
+        baseImage:
+          type: string
+          description: Docker base image reference
+        projects:
+          type: array
+          items:
+            $ref: '#/components/schemas/Project'
+        sharedMounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Mount'
+        machineProfile:
+          $ref: '#/components/schemas/MachineProfile'
+        developerProfile:
+          $ref: '#/components/schemas/DeveloperProfile'
+
+    Project:
+      type: object
+      required:
+        - name
+        - path
+      properties:
+        name:
+          type: string
+          pattern: '^[a-zA-Z0-9][a-zA-Z0-9-_]*[a-zA-Z0-9]$'
+        path:
+          type: string
+          pattern: '^[^/].*[^/]$'
+          description: Workspace-relative path
+        dependencies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Dependency'
+        mounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Mount'
+        environment:
+          type: object
+          additionalProperties:
+            type: string
+        features:
+          type: array
+          items:
+            type: string
+
+    MachineProfile:
+      type: object
+      required:
+        - platform
+      properties:
+        platform:
+          type: string
+          enum: [WSL2, macOS, Linux, Docker_Desktop]
+        dockerHost:
+          type: string
+          description: Docker daemon connection string
+        pathPrefix:
+          type: string
+          description: Platform-specific path prefix
+        performanceSettings:
+          type: object
+          additionalProperties:
+            type: string
+        capabilities:
+          type: array
+          items:
+            type: string
+          description: Required container capabilities
+
+    DeveloperProfile:
+      type: object
+      properties:
+        userId:
+          type: string
+          description: Developer identifier
+        customExtensions:
+          type: array
+          items:
+            type: string
+            pattern: '^[a-zA-Z0-9-_]+\.[a-zA-Z0-9-_]+$'
+        personalMounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Mount'
+        preferences:
+          type: object
+          additionalProperties:
+            type: string
+        claudeConfig:
+          $ref: '#/components/schemas/ClaudeConfiguration'
+
+    ClaudeConfiguration:
+      type: object
+      required:
+        - configDir
+      properties:
+        apiKeyMount:
+          type: string
+          description: Path to API key file
+        configDir:
+          type: string
+          description: Claude configuration directory
+        contextFiles:
+          type: array
+          items:
+            type: string
+        workflowSettings:
+          type: object
+          additionalProperties:
+            type: string
+        mcpServers:
+          type: array
+          items:
+            type: string
+
+    Mount:
+      type: object
+      required:
+        - source
+        - target
+        - type
+      properties:
+        source:
+          type: string
+          description: Source path or volume name
+        target:
+          type: string
+          pattern: '^/.*'
+          description: Container mount path (absolute)
+        type:
+          type: string
+          enum: [bind, volume, tmpfs]
+        consistency:
+          type: string
+          enum: [cached, delegated, consistent]
+          description: macOS performance optimization
+        readonly:
+          type: boolean
+          default: false
+
+    Dependency:
+      type: object
+      required:
+        - name
+        - version
+        - type
+      properties:
+        name:
+          type: string
+          description: Dependency name
+        version:
+          type: string
+          description: Version constraint (semver)
+        type:
+          type: string
+          enum: [apt, npm, pip, cargo, gem, binary]
+        global:
+          type: boolean
+          default: false
+          description: Install globally vs project-specific
+        buildOnly:
+          type: boolean
+          default: false
+          description: Required only during build
+
+paths:
+  /workspace/validate:
+    post:
+      summary: Validate workspace configuration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkspaceConfiguration'
+      responses:
+        '200':
+          description: Configuration is valid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  valid:
+                    type: boolean
+                  warnings:
+                    type: array
+                    items:
+                      type: string
+        '400':
+          description: Configuration validation failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  valid:
+                    type: boolean
+                    enum: [false]
+                  errors:
+                    type: array
+                    items:
+                      type: string
+
+  /workspace/generate:
+    post:
+      summary: Generate DevContainer files from configuration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkspaceConfiguration'
+      responses:
+        '200':
+          description: DevContainer files generated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  files:
+                    type: object
+                    additionalProperties:
+                      type: string
+                  success:
+                    type: boolean
+
+  /projects/{projectName}/config:
+    get:
+      summary: Get project-specific configuration
+      parameters:
+        - name: projectName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Project configuration
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+
+  /machine-profiles:
+    get:
+      summary: List available machine profiles
+      responses:
+        '200':
+          description: Available machine profiles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MachineProfile'
