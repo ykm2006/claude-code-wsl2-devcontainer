@@ -29,23 +29,23 @@
 - Phase 3-4: Implementation execution (manual or via tools)
 
 ## Summary
-Optimize the existing DevContainer configuration (../.devcontainer/) to support multi-project workspace management across different machines while maintaining consistency, performance, and maintainability. The solution will provide seamless Claude Code integration, cross-platform compatibility (Windows WSL2, macOS, Linux), and modular configuration for team collaboration.
+Optimize the existing DevContainer configuration (../.devcontainer/) to support multi-project workspace management across multiple Windows WSL2 machines while maintaining consistency, performance, and maintainability. The solution will provide seamless Claude Code integration, WSL2-specific optimizations, and modular configuration for team collaboration.
 
 ## Technical Context
 **Language/Version**: Multi-language support (Node.js 20, Python, Go, Rust as needed)
 **Primary Dependencies**: Docker, VS Code DevContainers, Powerlevel10k, Claude Code, git-delta, zsh
 **Storage**: Volume mounts for persistent data, bind mounts for configuration files
-**Testing**: DevContainer validation, cross-platform compatibility tests
-**Target Platform**: Linux containers on Windows WSL2, macOS, and Linux hosts
+**Testing**: DevContainer validation, WSL2 optimization tests
+**Target Platform**: Linux containers on Windows WSL2 hosts
 **Project Type**: Infrastructure configuration (DevContainer optimization)
 **Performance Goals**: Fast container startup, minimal resource overhead, efficient layer caching
-**Constraints**: Cross-platform compatibility, version control friendly, no machine-specific secrets
+**Constraints**: WSL2 optimization, version control friendly, no machine-specific secrets
 **Scale/Scope**: Support multiple projects simultaneously, 3+ machines synchronization, team collaboration
 
 **User-provided Implementation Details**:
 - Current DevContainer Structure Analysis: Review existing devcontainer.json, Dockerfile, init-firewall.sh, .p10k.zsh
 - Multi-Project Architecture: Docker layer optimization, volume mount strategies, resource isolation
-- Cross-Platform Compatibility: Windows WSL2, macOS, Linux considerations and path handling
+- WSL2 Optimization: Windows WSL2 specific performance tuning and path handling
 - Performance Optimization: Container startup time, image size, workflow efficiency
 - Maintainability Structure: Modular configuration, documentation, version control
 
@@ -194,21 +194,21 @@ ios/ or android/
 - Load `/templates/tasks-template.md` as base
 - Generate tasks from Phase 1 design docs (contracts, data model, quickstart)
 - Infrastructure tasks: Docker optimization, configuration templating
-- Validation tasks: Cross-platform testing, performance benchmarking
+- Validation tasks: WSL2 performance testing, benchmarking
 - Integration tasks: Claude Code setup, MCP server configuration
 - Documentation tasks: Team onboarding guides, troubleshooting docs
 
 **Ordering Strategy**:
 1. **Foundation** (Infrastructure setup): Dockerfile optimization, base configuration
 2. **Configuration** (Modular system): Template engine, validation schema
-3. **Integration** (Platform-specific): Cross-platform compatibility, performance tuning
+3. **Integration** (WSL2-specific): WSL2 optimization, performance tuning
 4. **Validation** (Testing & Documentation): Quickstart validation, team rollout
 5. Mark [P] for parallel execution where tasks are independent
 
 **Task Categories Expected**:
 - Docker layer optimization tasks (3-4 tasks)
 - Configuration system tasks (4-5 tasks)
-- Cross-platform compatibility tasks (2-3 tasks)
+- WSL2 optimization tasks (2-3 tasks)
 - Claude Code integration tasks (3-4 tasks)
 - Validation and documentation tasks (3-4 tasks)
 - Performance optimization tasks (2-3 tasks)
@@ -219,7 +219,7 @@ ios/ or android/
 - Infrastructure focus rather than application code
 - Configuration templating instead of API development
 - Performance validation instead of unit testing
-- Cross-platform compatibility testing instead of business logic tests
+- WSL2 optimization testing instead of business logic tests
 
 **IMPORTANT**: This phase is executed by the /tasks command, NOT by /plan
 

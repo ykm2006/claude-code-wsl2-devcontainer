@@ -44,10 +44,10 @@ Individual development project with its own dependencies and configuration requi
 - No conflicting dependency versions with other projects
 
 ### MachineProfile
-Configuration specific to a host machine type (WSL2, macOS, Linux).
+Configuration specific to Windows WSL2 host environment.
 
 **Fields**:
-- `platform`: Enum [WSL2, macOS, Linux, Docker_Desktop]
+- `platform`: Enum [WSL2] - Currently supports Windows WSL2 only
 - `dockerHost`: String - Docker daemon connection
 - `pathPrefix`: String - Platform-specific path prefix
 - `performanceSettings`: Map<String, String> - Platform optimizations
@@ -104,7 +104,7 @@ Volume or bind mount configuration for container storage.
 - `source`: String - Source path or volume name
 - `target`: String - Container mount path
 - `type`: Enum [bind, volume, tmpfs]
-- `consistency`: Enum [cached, delegated, consistent] - macOS optimization
+- `consistency`: Enum [cached, delegated, consistent] - WSL2 optimization
 - `readonly`: Boolean - Mount read-only flag
 
 **Relationships**:

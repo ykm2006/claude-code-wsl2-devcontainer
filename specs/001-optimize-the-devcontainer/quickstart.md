@@ -62,8 +62,8 @@ docker volume ls | grep devcontainer
 
 ## Configuration Validation
 
-### Test Cross-Platform Compatibility
-Run these commands to verify cross-platform features:
+### Test WSL2 Compatibility
+Run these commands to verify WSL2-specific features:
 
 ```bash
 # Test path handling
@@ -207,7 +207,7 @@ whoami
 id
 ```
 
-### Platform-Specific Issues
+### WSL2-Specific Issues
 
 #### Windows WSL2
 ```bash
@@ -219,15 +219,6 @@ echo $WSL_INTEROP
 wslpath -w /workspace
 ```
 
-#### macOS
-```bash
-# Verify Docker Desktop
-docker context ls
-docker info | grep "Operating System"
-
-# Check file system performance
-time find . -name "*.json" | head -10
-```
 
 ## Validation Checklist
 
@@ -238,7 +229,7 @@ time find . -name "*.json" | head -10
 - [ ] Dependency isolation working (npm/pip)
 - [ ] Git configuration synchronized
 - [ ] Volume mounts performing well
-- [ ] Cross-platform paths resolving correctly
+- [ ] WSL2 paths resolving correctly
 - [ ] Resource usage within acceptable limits
 
 ## Next Steps
@@ -261,5 +252,5 @@ For issues or improvements:
 After completing this quickstart, you should achieve:
 - **70-85% faster builds** through layer optimization
 - **60% faster container initialization** via performance tuning
-- **100% consistent experience** across Windows WSL2, macOS, and Linux
+- **Optimized experience** for Windows WSL2 environment
 - **Seamless Claude Code integration** for AI-assisted development

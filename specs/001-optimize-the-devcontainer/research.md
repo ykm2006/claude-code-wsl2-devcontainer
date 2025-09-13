@@ -25,7 +25,7 @@ du -sh ~/.npm ~/.cache
 - **Stable working environment** across team
 - **Functional Claude Code integration** with proper API key mounting
 - **Working Powerlevel10k setup** with font support
-- **Cross-platform compatibility** already achieved
+- **WSL2 optimization** already functional
 - **Firewall script functionality** for network security
 
 ### Identified Improvement Opportunities
@@ -41,7 +41,7 @@ du -sh ~/.npm ~/.cache
 
 #### Tasks:
 1. **Performance Baseline Collection**
-   - Document current build times across platforms
+   - Document current build times on Windows WSL2
    - Measure container startup performance
    - Record resource usage patterns
    - Identify actual bottlenecks vs. perceived issues
@@ -54,7 +54,7 @@ du -sh ~/.npm ~/.cache
 
 3. **Enhanced Documentation**
    - Improve setup instructions with troubleshooting
-   - Document platform-specific variations
+   - Document WSL2-specific optimizations
    - Create team onboarding checklist
    - Add debugging guides
 
@@ -86,7 +86,7 @@ du -sh ~/.npm ~/.cache
 **Risk Level**: **LOW-MEDIUM** - Changes build process but not runtime behavior
 **Rollback Strategy**: Git revert + documented "known good" Dockerfile backup
 **Success Criteria**: 20-40% build time improvement (realistic target based on cache effectiveness)
-**Testing Required**: Build on all 3 platforms, verify all tools still work
+**Testing Required**: Build on Windows WSL2, verify all tools still work
 
 ### Phase 3: Volume Mount Performance (Week 4-5)
 **Goal**: Optimize I/O performance while maintaining all current functionality
@@ -153,10 +153,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 ## Volume Mount Patterns
 
 ### Decision: Hybrid Mount Strategy (Named Volumes + Bind Mounts)
-**Rationale**: Named volumes provide 2-5x better I/O performance on macOS/Windows while bind mounts ensure configuration consistency.
+**Rationale**: Named volumes provide better I/O performance on Windows WSL2 while bind mounts ensure configuration consistency.
 
 **Alternatives Considered**:
-- Pure bind mounts (poor performance on non-Linux hosts)
+- Pure bind mounts (poor performance on Windows WSL2)
 - Pure named volumes (configuration sync issues)
 
 ### Implementation Pattern:
@@ -175,19 +175,20 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 }
 ```
 
-## Cross-Platform Compatibility
+## Windows WSL2 Optimization
 
-### Decision: Platform-Agnostic Configuration with Environment Variable Fallbacks
-**Rationale**: WSL2 provides near-native Linux performance while proper path handling ensures seamless macOS compatibility.
+### Decision: WSL2-Specific Configuration with Performance Optimizations
+**Rationale**: WSL2 provides near-native Linux performance with Windows filesystem integration, enabling optimizations specific to this environment.
 
 **Alternatives Considered**:
-- Platform-specific configurations (maintenance overhead)
-- Single platform focus (limited team adoption)
+- Generic Linux configuration (misses WSL2-specific optimizations)
+- Windows-native containers (compatibility and performance issues)
 
 ### Implementation Strategy:
-- Use forward slashes in all paths
-- Implement `${localEnv:VAR:fallback}` patterns
+- Use WSL2 filesystem optimizations (`/mnt/wslg`, `\\wsl$` paths)
+- Implement WSL2-specific volume mount patterns
 - Add `--platform=linux/amd64` for consistency
+- Optimize for Windows filesystem integration
 
 ## Performance Optimization
 
@@ -265,6 +266,6 @@ RUN --mount=type=cache,target=/var/cache/apt \
 
 - **Build Performance**: 70-85% faster builds through layer optimization
 - **Startup Time**: 60% faster container initialization
-- **Cross-Platform**: 100% consistent experience across Windows WSL2, macOS, Linux
+- **WSL2 Optimization**: Optimized performance for Windows WSL2 environment
 - **Team Efficiency**: 50% reduction in new developer onboarding time
 - **AI Development**: Enhanced Claude Code workflows with secure execution environment

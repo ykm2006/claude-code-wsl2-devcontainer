@@ -11,9 +11,9 @@
    - Efficient resource sharing between projects
 
 2. **Multi-Machine Synchronization**
-   - Consistent development environment across 3 different machines
+   - Consistent development environment across multiple Windows WSL2 machines
    - Reliable reproducibility of the exact same toolchain and settings
-   - OS-agnostic configuration (Windows WSL2, macOS, Linux)
+   - WSL2-optimized configuration
 
 3. **Claude Code Integration**
    - Seamless API key and configuration sharing
@@ -87,7 +87,7 @@ When creating this spec from a user prompt:
 As a developer working on multiple projects across different machines, I need a standardized, portable development environment that maintains consistency across all my workstations, supports multiple project workspaces simultaneously, and integrates seamlessly with Claude Code for AI-assisted development workflows.
 
 ### Acceptance Scenarios
-1. **Given** a developer with projects on 3 different machines (Windows WSL2, macOS, Linux), **When** they clone the DevContainer configuration and open it on any machine, **Then** the exact same development environment with identical toolchain versions and settings should be available
+1. **Given** a developer with projects on multiple Windows WSL2 machines, **When** they clone the DevContainer configuration and open it on any machine, **Then** the exact same development environment with identical toolchain versions and settings should be available
 
 2. **Given** a workspace with multiple related projects, **When** the developer switches between projects, **Then** each project's dependencies should be isolated and accessible without conflicts or requiring container restart
 
@@ -107,7 +107,7 @@ As a developer working on multiple projects across different machines, I need a 
 
 ### Functional Requirements
 - **FR-001**: System MUST support simultaneous management of multiple project workspaces within a single container instance
-- **FR-002**: System MUST maintain consistent development environment across Windows WSL2, macOS, and Linux platforms
+- **FR-002**: System MUST maintain consistent development environment across multiple Windows WSL2 machines
 - **FR-003**: System MUST preserve exact toolchain versions and settings across all synchronized machines
 - **FR-004**: System MUST provide automated mounting and configuration of Claude Code settings and API keys
 - **FR-005**: System MUST support Powerlevel10k terminal with proper font rendering
@@ -123,7 +123,7 @@ As a developer working on multiple projects across different machines, I need a 
 ### Key Entities *(include if feature involves data)*
 - **Workspace**: Container environment hosting multiple projects with shared resources and isolated dependencies
 - **Project**: Individual development project with its own dependencies and configuration requirements
-- **Machine Profile**: Configuration specific to a host machine type (WSL2, macOS, Linux)
+- **Machine Profile**: Configuration optimizations specific to Windows WSL2 environment
 - **Developer Profile**: Personal customizations and settings separate from core configuration
 - **Claude Configuration**: API keys, settings, and preferences for Claude Code integration
 
