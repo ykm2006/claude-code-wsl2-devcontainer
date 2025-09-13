@@ -4,7 +4,7 @@
 This project provides incremental optimization of existing working DevContainer configurations for multi-project, multi-machine development environments on Windows WSL2 with enhanced Claude Code integration, SpecKit methodology, and Serena MCP support.
 
 ## Project Status
-**Phase**: Specification Revised - Ready for Implementation Planning
+**Phase**: Implementation Planning - Creating Detailed Plan
 **Branch**: `001-optimize-the-devcontainer`
 **Approach**: Incremental optimization of proven working configuration
 **Target Platform**: Windows WSL2 (exclusive focus)
@@ -29,9 +29,9 @@ This project provides incremental optimization of existing working DevContainer 
 - **FR-006**: Current user permissions and sudo configuration for node user
 
 ### New Integrations
-- **FR-014**: SpecKit project initialization script for AI-assisted development workflows
+- **FR-014**: GitHub SpecKit integration with `uvx` for spec-driven development workflows
 - **FR-015**: Rapid WSL2 DevContainer environment creation through GitHub clone
-- **FR-016**: Serena MCP initialization script for MCP server management
+- **FR-016**: Serena MCP server integration with Claude Code via `claude mcp add` command
 
 ### Performance Targets (Conservative)
 - **Build Time**: 10-20% improvement through layer consolidation
@@ -45,13 +45,19 @@ This project provides incremental optimization of existing working DevContainer 
 - **Baseline Preservation**: Existing working configuration at `../.devcontainer/` unchanged
 - **Function-First**: Performance secondary to maintaining proven functionality
 
-## Current File Structure (Cleaned)
+## Documentation Structure
 ```
 specs/001-optimize-the-devcontainer/
-├── spec.md / spec-ja.md           # Incremental optimization specifications (revised)
-└── [REMOVED]                      # All previous planning documents (outdated approach)
+├── spec.md                        # Master specification (English) - Complete
+├── spec-ja.md                     # Reference specification (Japanese) - Complete
+├── plan.md                        # Implementation plan (English) - Complete
+├── plan-ja.md                     # Implementation plan (Japanese) - Complete
+├── task.md                        # Actionable task breakdown (English) - Complete
+├── task-ja.md                     # Actionable task breakdown (Japanese) - Complete
+├── rollback-procedures.md         # Rollback documentation (English) - Complete
+└── rollback-procedures-ja.md      # Rollback documentation (Japanese) - Complete
 
-../.devcontainer/                   # ACTUAL WORKING BASELINE
+../.devcontainer/                   # ACTUAL WORKING BASELINE (Unchanged)
 ├── Dockerfile                     # 183 lines, proven working
 ├── devcontainer.json              # Complete configuration
 ├── .p10k.zsh                      # Powerlevel10k theme (95KB)
@@ -81,11 +87,26 @@ specs/001-optimize-the-devcontainer/
 - **NO** modification of Claude Code integration or configuration mounting
 - **ALL** changes must be incrementally testable and immediately reversible
 
-## Next Steps
-1. **Create Implementation Plan** (plan.md) based on revised incremental approach
-2. **Document Rollback Procedures** for each optimization phase
-3. **Begin with Phase 1**: Measurement and backup of current working configuration
-4. **Incremental Testing**: Each change tested immediately against existing functionality
+## Current Implementation Progress
+1. **✅ Specification Complete**: Both English master and Japanese reference versions (spec.md/spec-ja.md)
+2. **✅ Implementation Plan**: Detailed plan.md with corrected SpecKit/Serena MCP integration methods
+3. **✅ Task Breakdown**: Actionable task.md with specific durations and acceptance criteria
+4. **✅ Rollback Procedures**: Complete emergency procedures documentation (rollback-procedures.md/rollback-procedures-ja.md)
+5. **✅ Documentation Structure**: All documents available in English (master) and Japanese (reference)
+
+## AI Assistant Communication Profile
+**Tone**: 33歳女性高校教師が教え子に話すような口調
+- フランクで親しみやすい
+- チャーミングで親近感のある表現
+- 専門的内容も分かりやすく説明
+- 適度な関西弁やくだけた表現を使用
+- 「〜だよね♪」「〜しちゃった(笑)」などの表現
+
+## Next Immediate Steps
+1. **Begin Phase 0 Research** - Start systematic analysis of existing DevContainer configuration
+2. **Execute Task 0.1-0.4** - Complete research and risk assessment phase
+3. **Begin Phase 1 execution** - Baseline measurement and backup creation
+4. **Follow task.md sequence** - Execute planned tasks with validation at each step
 
 ## Success Criteria
 - Configuration builds faster and caches better while being **functionally identical** to current working setup
@@ -94,5 +115,5 @@ specs/001-optimize-the-devcontainer/
 - Any optimization that breaks existing functionality will be immediately reverted
 
 ---
-*Updated: 2025-09-13 - Specification revised for incremental optimization approach*
-*Session Complete: Ready for implementation planning phase*
+*Updated: 2025-09-13 - Implementation planning phase in progress*
+*Documentation Structure: English master specifications with Japanese reference versions*
