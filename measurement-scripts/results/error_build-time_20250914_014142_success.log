@@ -1,0 +1,8 @@
+🏗️  DevContainer Build Time Measurement
+=======================================
+Timestamp: Sun Sep 14 01:41:56 JST 2025
+DevContainer: /workspace/claude-code-wsl2-devcontainer/.devcontainer
+
+Running 3 build iterations for accurate measurement...
+📏 Build iteration 1/3...
+/home/yuichi/WORK/claude-code-wsl2-devcontainer/measurement-scripts/build-time.sh: line 33: cd: /workspace/claude-code-wsl2-devcontainer/.devcontainer: No such file or directory

@@ -1,0 +1,20 @@
+💻 DevContainer Resource Usage Monitoring
+========================================
+Timestamp: Sun Sep 14 01:54:14 JST 2025
+DevContainer: /home/yuichi/WORK/claude-code-wsl2-devcontainer/.devcontainer
+
+📊 Starting resource monitoring...
+🏗️  Starting DevContainer build with monitoring...
+   ✅ Build completed in .883387457s
+
+📊 Resource Usage Analysis
+=========================
+Sample: CPU=4.5%, Memory=983MB
+
+Summary Statistics:
+Average CPU: 4.5%
+Average Memory: 983MB
+Peak Memory: 983MB
+
+💾 Results saved to: /home/yuichi/WORK/claude-code-wsl2-devcontainer/measurement-scripts/results/resource_summary_20250914_015414.json
+📈 Raw data: /home/yuichi/WORK/claude-code-wsl2-devcontainer/measurement-scripts/results/resource_usage_20250914_015414.txt

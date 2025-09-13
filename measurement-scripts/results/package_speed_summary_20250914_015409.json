@@ -1,0 +1,12 @@
+{
+  "timestamp": "20250914_015409",
+  "measurements": {
+    "npm_install_time": 1.437713366,
+    "pip_install_time": 1.018238157
+  },
+  "test_packages": {
+    "npm": "lodash",
+    "pip": "requests"
+  },
+  "devcontainer_path": "/home/yuichi/WORK/claude-code-wsl2-devcontainer/.devcontainer"
+}

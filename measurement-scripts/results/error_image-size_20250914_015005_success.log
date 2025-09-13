@@ -1,0 +1,8 @@
+📦 DevContainer Image Size Measurement
+======================================
+Timestamp: Sun Sep 14 01:50:09 JST 2025
+DevContainer: /home/yuichi/WORK/claude-code-wsl2-devcontainer/.devcontainer
+
+🏗️  Building DevContainer image...
+📏 Measuring image size...
+numfmt: invalid suffix in input ‘3.15GB’: ‘B’
