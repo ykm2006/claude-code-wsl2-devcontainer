@@ -6,7 +6,7 @@ ARG CLAUDE_CODE_VERSION=latest
 ARG GIT_DELTA_VERSION=0.18.2
 ARG ZSH_IN_DOCKER_VERSION=1.2.0
 
-# Install basic development tools and utilities
+# Consolidated system packages installation (combines 2 apt-get operations)
 RUN apt-get update && apt-get install -y --no-install-recommends \
   less \
   git \
@@ -26,6 +26,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   curl \
   wget \
   ca-certificates \
+  aggregate \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install fzf from source (more reliable than package)
@@ -33,20 +34,12 @@ RUN git clone --depth 1 https://github.com/junegunn/fzf.git /usr/local/share/fzf
   && /usr/local/share/fzf/install --bin \
   && ln -s /usr/local/share/fzf/bin/fzf /usr/local/bin/fzf
 
-# Install aggregate tool separately if needed
-RUN apt-get update && apt-get install -y --no-install-recommends \
-  aggregate \
-  && apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Install GitHub CLI
+# Setup GitHub CLI repository and install with Python environment (combines 2 apt-get operations)
 RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
   && chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
   && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" > /etc/apt/sources.list.d/github-cli.list \
-  && apt-get update && apt-get install -y gh \
-  && apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Install Python environment
-RUN apt-get update && apt-get install -y --no-install-recommends \
+  && apt-get update && apt-get install -y --no-install-recommends \
+    gh \
     python3 \
     python3-pip \
     python3-venv \
@@ -54,7 +47,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-setuptools \
     python3-wheel \
     build-essential \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+  && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Create symbolic link for python command
 RUN ln -s /usr/bin/python3 /usr/local/bin/python

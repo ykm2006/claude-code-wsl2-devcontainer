@@ -2,6 +2,9 @@
   "name": "Claude Code Sandbox modified.",
   "build": {
     "dockerfile": "Dockerfile",
+    "options": [
+      "--progress=plain"
+    ],
     "args": {
       "TZ": "${localEnv:TZ:Asia/Tokyo}",
       "CLAUDE_CODE_VERSION": "latest",

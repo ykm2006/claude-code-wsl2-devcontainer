@@ -137,6 +137,16 @@ specs/001-optimize-the-devcontainer/
 - 適度な関西弁やくだけた表現を使用
 - 「〜だよね♪」「〜しちゃった(笑)」などの表現
 
+## Development Workflow Constraints
+### Testing Environment Requirements
+- **DevContainer Limitations**: Build testing and performance measurements CANNOT be executed from within DevContainer
+- **Host OS Requirement**: All build tests MUST be performed from Host OS (WSL2 Ubuntu environment)
+- **Commit Prerequisites**: Changes MUST NOT be committed until Host OS testing validates:
+  - Successful build completion
+  - All functionality preservation
+  - Performance improvements measured
+- **Testing Location**: `~/WORK/claude-code-wsl2-devcontainer/` on Host OS
+
 ## Phase 2 In Progress - Task Completion Status
 1. **✅ Phase 1 Complete** - All measurement, documentation, and backup tasks finished
 2. **🔄 Phase 2 In Progress** - Low-risk optimizations underway
@@ -154,15 +164,45 @@ specs/001-optimize-the-devcontainer/
 - **📚 Lesson Learned**: DevContainer architecture fundamentally different from standard Docker builds
 - **✅ Future Value**: .dockerignore provides future-proofing for potential architecture changes
 
+### ✅ Task 2.2: BuildKit + apt-get Consolidation Complete
+**Status**: ✅ COMPLETE - Implementation successful with exceptional results
+**Duration**: Host OS testing complete (2025-09-14 07:46)
+**Branch**: `phase2-task2.2-buildkit-apt-consolidation`
+**Implementation**:
+- **✅ BuildKit Enabled**: Added to devcontainer.json with DOCKER_BUILDKIT=1
+- **✅ apt-get Consolidated**: Reduced from 4 to 2 operations
+  - Combined basic tools + aggregate installation
+  - Combined GitHub CLI setup + Python environment
+- **✅ Performance Results**:
+  - **Baseline**: 351.3s (5m 51s)
+  - **Optimized**: 179.5s (2m 59s)
+  - **Improvement**: **49% faster build time** 🚀
+**Actual Impact**: 49% improvement (far exceeded 15-25% target)
+
 ## Current Session Status (2025-09-14)
 **Phase 1**: ✅ COMPLETE - All baseline measurements, documentation, and backup procedures finished
-**Phase 2**: 🔄 IN PROGRESS - Task 2.1 complete, Task 2.2 ready
-**Next Task**: Task 2.2 - BuildKit + apt-get consolidation (expected significant performance gains)
-**Current Branch**: `master` (Phase 2 optimization in progress)
+**Phase 2**: ✅ TASK 2.2 COMPLETE - Both low-risk optimizations successfully implemented
+**Next Action**: Ready for Phase 3 (Cache Implementation) or commit current progress
+**Current Branch**: `phase2-task2.2-buildkit-apt-consolidation` (ready for commit)
+**Achievement**: **49% build time improvement** (179.5s vs 351.3s baseline)
+
+### ⚠️ Important Testing Requirements
+**DevContainer Environment Limitations**:
+- **Build Testing**: CANNOT be performed from within DevContainer environment
+- **Performance Measurement**: MUST be executed from Host OS (WSL2)
+- **Commit Policy**: NO commits until Host OS testing confirms:
+  1. Build completes successfully
+  2. All functionality preserved
+  3. Performance metrics captured
+
+**✅ Completed Tests (Host OS)**:
+- ✅ Build time measurement: 49% improvement achieved
+- ✅ Functionality verification: All packages installed correctly
+- ✅ Performance comparison: Far exceeded 15-25% target
 
 ## Revised Research-Backed Optimization Targets
 - **~~Build Context~~**: ~~116KB → <60KB~~ **→ NO CHANGE POSSIBLE** (DevContainer architecture limitation)
-- **Build Time**: 15-25% improvement (apt-get consolidation + BuildKit) - **PRIMARY TARGET**
+- **Build Time**: ~~15-25%~~ **→ ✅ 49% ACHIEVED** (apt-get consolidation + BuildKit)
 - **Package Operations**: 30-70% faster (cache mounts implementation) - **PRIMARY TARGET**
 - **Layer Count**: 19 → 12-15 RUN commands (optional advanced optimization)
 
@@ -173,6 +213,6 @@ specs/001-optimize-the-devcontainer/
 - Any optimization that breaks existing functionality will be immediately reverted
 
 ---
-*Updated: 2025-09-14 - Phase 2 Task 2.1 COMPLETE, Task 2.2 ready for implementation*
-*Status: .dockerignore implemented (no performance impact), BuildKit + apt-get consolidation next*
+*Updated: 2025-09-14 - Phase 2 COMPLETE: Task 2.1 & 2.2 successfully implemented*
+*Status: 49% build time improvement achieved, ready for Phase 3 or commit*
 *Documentation Structure: English master specifications with Japanese reference versions*

@@ -1,0 +1,13 @@
+{
+  "timestamp": "20250914_072109",
+  "mode": "baseline",
+  "measurements": {
+    "build_time_avg": 351.346,
+    "build_time_min": 344.056787374,
+    "build_time_max": 365.004469405
+  },
+  "iterations": 3,
+  "devcontainer_path": "/home/yuichi/WORK/.devcontainer",
+  "buildkit_enabled": false,
+  "cache_cleared": true
+}
