@@ -1,0 +1,26 @@
+🚀 DevContainer Startup Time Measurement
+========================================
+Timestamp: Sun Sep 14 01:53:12 JST 2025
+DevContainer: /home/yuichi/WORK/claude-code-wsl2-devcontainer/.devcontainer
+
+Running 5 startup iterations for accurate measurement...
+📏 Startup iteration 1/5...
+   🏗️  Building container for startup test...
+   ✅ Iteration 1: 1.970833462s
+📏 Startup iteration 2/5...
+   ✅ Iteration 2: .384660319s
+📏 Startup iteration 3/5...
+   ✅ Iteration 3: .393237464s
+📏 Startup iteration 4/5...
+   ✅ Iteration 4: .389451666s
+📏 Startup iteration 5/5...
+   ✅ Iteration 5: .390948560s
+
+📊 Startup Time Statistics
+==========================
+Average: 0.705826s
+Minimum: .384660319s
+Maximum: 1.970833462s
+
+💾 Results saved to: /home/yuichi/WORK/claude-code-wsl2-devcontainer/measurement-scripts/results/startup_summary_20250914_015312.json
+📈 Raw data: /home/yuichi/WORK/claude-code-wsl2-devcontainer/measurement-scripts/results/startup_times_20250914_015312.txt

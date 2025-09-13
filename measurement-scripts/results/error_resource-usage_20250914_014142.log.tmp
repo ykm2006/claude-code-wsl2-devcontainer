@@ -1,0 +1,8 @@
+💻 DevContainer Resource Usage Monitoring
+========================================
+Timestamp: Sun Sep 14 01:41:56 JST 2025
+DevContainer: /workspace/claude-code-wsl2-devcontainer/.devcontainer
+
+📊 Starting resource monitoring...
+🏗️  Starting DevContainer build with monitoring...
+/home/yuichi/WORK/claude-code-wsl2-devcontainer/measurement-scripts/resource-usage.sh: line 55: cd: /workspace/claude-code-wsl2-devcontainer/.devcontainer: No such file or directory

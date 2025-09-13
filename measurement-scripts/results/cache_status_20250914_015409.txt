@@ -1,0 +1,2 @@
+npm_cache: /home/node/.npm
+pip_cache: /home/node/.cache/pip

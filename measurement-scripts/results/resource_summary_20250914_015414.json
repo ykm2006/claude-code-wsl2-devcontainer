@@ -1,0 +1,9 @@
+{
+  "timestamp": "20250914_015414",
+  "measurements": {
+    "avg_cpu_percent": 4.5,
+    "avg_memory_mb": 983,
+    "peak_memory_mb": 983
+  },
+  "devcontainer_path": "/home/yuichi/WORK/claude-code-wsl2-devcontainer/.devcontainer"
+}
