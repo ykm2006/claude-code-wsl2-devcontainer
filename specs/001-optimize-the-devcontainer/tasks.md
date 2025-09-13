@@ -3,7 +3,8 @@
 **Project**: DevContainer optimization for multi-project, multi-machine development
 **Branch**: `001-optimize-the-devcontainer`
 **Approach**: Conservative, incremental improvements with comprehensive rollback procedures
-**Total Estimated Time**: 6 weeks (with 25% buffer for unexpected issues)
+**Total Estimated Time**: 7 weeks (with 25% buffer for unexpected issues)
+**Total Tasks**: 24 tasks across 6 phases
 
 ---
 
@@ -669,6 +670,139 @@
 - Critical business impact from system issues
 - System too unreliable for production use
 - Team productivity significantly impacted
+
+---
+
+### Task 22: GitHub Repository Setup and DevContainer Distribution
+**Description**: Publish DevContainer configuration on GitHub and establish installation procedures for new environments
+**Estimated Time**: 6 hours
+**Risk Level**: LOW-MEDIUM
+**Dependencies**: Task 21
+
+**Steps**:
+1. Set up GitHub repository structure
+   ```
+   claude-code-wsl2-devcontainer/
+   ├── .devcontainer/
+   │   ├── devcontainer.json
+   │   ├── Dockerfile
+   │   └── scripts/
+   ├── README.md
+   ├── SETUP.md
+   └── examples/
+   ```
+2. Commit optimized DevContainer configuration files to repository
+3. Create comprehensive README.md (bilingual Japanese/English support)
+4. Create setup instructions document (SETUP.md) for new environments
+5. Add sample project structures to examples/
+6. Create GitHub Actions workflow for configuration validation
+
+**Success Criteria**:
+- GitHub repository properly configured with all DevContainer settings
+- README.md is clear and explains project purpose and usage
+- New machines can be set up from scratch following SETUP.md
+- Sample projects can validate DevContainer functionality
+- GitHub Actions automatically check configuration integrity
+
+**Rollback Strategy**:
+- Revert repository to private status
+- Revert problematic commits
+- Restore from configuration file backups
+
+**Rollback Triggers**:
+- DevContainer configuration doesn't work on GitHub
+- Setup procedures consistently fail
+- Security or privacy issues discovered
+
+---
+
+### Task 23: New Environment Installation Procedure Validation and Documentation
+**Description**: Test installation procedures on multiple fresh WSL2 environments and finalize documentation
+**Estimated Time**: 8 hours
+**Risk Level**: MEDIUM
+**Dependencies**: Task 22
+
+**Steps**:
+1. Validation testing on clean Windows WSL2 environments
+2. Testing on different WSL2 distributions (Ubuntu, Debian)
+3. Create automated prerequisite checking script
+4. Enhance troubleshooting guide
+5. Create video or screenshot-guided documentation for new users
+6. Actual installation testing by team members
+
+**Success Criteria**:
+- Installation succeeds on 3+ different fresh environments
+- Installation completes within 30 minutes
+- Troubleshooting guide resolves common issues
+- New users can complete setup using documentation alone
+- Automated checking script can verify environment readiness
+
+**Rollback Strategy**:
+- Disable problematic installation procedures
+- Revert to known working procedures
+- Provide alternative manual setup procedures to users
+
+**Rollback Triggers**:
+- Installation success rate falls below 80%
+- Critical security vulnerabilities discovered
+- Causes irrecoverable issues to WSL2 environments
+
+---
+
+## Phase 6: Distribution - Repository Setup and Installation Validation (Week 7)
+
+### Task 22: GitHub Repository Setup and DevContainer Distribution
+[Content already added above]
+
+### Task 23: New Environment Installation Procedure Validation and Documentation
+[Content already added above]
+
+---
+
+### Task 24: SpecKit Project Initialization Script Integration
+**Description**: Integrate SpecKit initialization script for rapid project setup with AI-driven development workflows
+**Estimated Time**: 6 hours
+**Risk Level**: LOW
+**Dependencies**: Task 22
+
+**Steps**:
+1. Create automated SpecKit initialization script
+   ```bash
+   #!/bin/bash
+   # Initialize SpecKit project structure
+   .devcontainer/scripts/init-speckit.sh [project-name]
+   ```
+2. Implement project template generation
+   - Create `/specs` directory structure
+   - Generate initial `spec.md` template
+   - Set up `plan.md`, `research.md`, `tasks.md` templates
+   - Configure bilingual document support (English/Japanese)
+3. Integrate with DevContainer post-create command
+4. Add SpecKit command aliases
+   ```bash
+   alias specify='bash .specify/scripts/bash/create-new-feature.sh'
+   alias plan='bash .specify/scripts/bash/plan-feature.sh'
+   alias tasks='bash .specify/scripts/bash/generate-tasks.sh'
+   ```
+5. Create SpecKit workflow documentation
+6. Add AI agent configuration for automated translations
+
+**Success Criteria**:
+- New projects can be initialized with SpecKit structure in < 30 seconds
+- All SpecKit templates are properly generated
+- Command aliases work across all shell sessions
+- Bilingual documentation support is functional
+- AI agents can automatically generate Japanese versions
+
+**Rollback Strategy**:
+- Remove initialization script
+- Revert to manual project setup
+- Disable post-create commands
+
+**Rollback Triggers**:
+- Script fails on > 20% of attempts
+- Generated templates are malformed
+- Conflicts with existing project structures
 
 ---
 
