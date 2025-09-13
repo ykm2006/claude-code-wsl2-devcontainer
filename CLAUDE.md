@@ -1,87 +1,98 @@
 # DevContainer Optimization Project - Claude Code Context
 
 ## Project Overview
-This project optimizes DevContainer configurations for multi-project, multi-machine development environments on Windows WSL2 with enhanced Claude Code integration and SpecKit methodology support.
+This project provides incremental optimization of existing working DevContainer configurations for multi-project, multi-machine development environments on Windows WSL2 with enhanced Claude Code integration, SpecKit methodology, and Serena MCP support.
 
 ## Project Status
-**Phase**: Planning Complete, Ready for Implementation
+**Phase**: Specification Revised - Ready for Implementation Planning
 **Branch**: `001-optimize-the-devcontainer`
-**Timeline**: 7 weeks (24 tasks across 6 phases)
+**Approach**: Incremental optimization of proven working configuration
 **Target Platform**: Windows WSL2 (exclusive focus)
 
-## Current Technology Stack
-- **Container Runtime**: Docker with DevContainers
+## Current Working Configuration (Baseline)
+- **Location**: `~/WORK/.devcontainer/` (183-line Dockerfile, complete devcontainer.json)
+- **Status**: Fully functional and proven across 3 machines
 - **Base Image**: Node.js 20 on Debian Bullseye
-- **Shell**: Zsh with Powerlevel10k theme
-- **Development Tools**: git-delta, modern CLI tools (ripgrep, bat, fd)
-- **AI Integration**: Claude Code with MCP server support
-- **Languages**: Node.js, Python 3.11, Rust toolchain
+- **Shell**: Zsh with Powerlevel10k theme (complete .p10k.zsh configuration)
+- **Development Stack**: Python data science (40+ packages), Rust toolchain, modern CLI tools
+- **AI Integration**: Claude Code with proper API key mounting
+- **Network**: iptables firewall with NET_ADMIN/NET_RAW capabilities
 
-## Key Components
+## Key Optimization Requirements
 
-### Configuration Files (To Be Implemented)
-- `.devcontainer/devcontainer.json` - Main DevContainer configuration
-- `.devcontainer/Dockerfile` - Multi-stage optimized container build
-- `.devcontainer/scripts/init-speckit.sh` - SpecKit project initialization
-- `.devcontainer/.p10k.zsh` - Powerlevel10k theme configuration
+### Functional Preservation (Non-Negotiable)
+- **FR-001**: Exact multi-project workspace architecture (`~/WORK/` → `/workspace/`)
+- **FR-002**: Current Claude Code mounting and integration (`~/.claude`, `~/.claude.json`)
+- **FR-003**: Current firewall capabilities (NET_ADMIN, NET_RAW, init-firewall.sh)
+- **FR-004**: Identical Powerlevel10k terminal configuration and appearance
+- **FR-005**: All current Python packages and versions (40+ data science stack)
+- **FR-006**: Current user permissions and sudo configuration for node user
 
-### Optimization Focus Areas
-1. **Multi-Project Architecture**: Docker layer optimization, volume mount strategies
-2. **WSL2 Optimization**: Windows WSL2-specific performance tuning
-3. **Performance Targets**: 20-40% build improvement, 10-25% startup improvement
-4. **Maintainability**: Modular configuration, team collaboration features
-5. **Claude Code Integration**: Enhanced AI development workflows
-6. **SpecKit Integration**: Automated project initialization and bilingual documentation
+### New Integrations
+- **FR-014**: SpecKit project initialization script for AI-assisted development workflows
+- **FR-015**: Rapid WSL2 DevContainer environment creation through GitHub clone
+- **FR-016**: Serena MCP initialization script for MCP server management
 
-## Recent Planning Accomplishments
-- Created comprehensive specification documents (spec.md, plan.md, research.md, tasks.md)
-- Developed conservative implementation approach with realistic performance targets
-- Designed 24 implementation tasks across 6 phases
-- Added full bilingual documentation support (Japanese/English)
-- Integrated GitHub distribution and SpecKit initialization tasks
-- Focused exclusively on Windows WSL2 platform optimization
+### Performance Targets (Conservative)
+- **Build Time**: 10-20% improvement through layer consolidation
+- **Package Operations**: 15-30% improvement through persistent caching
+- **Startup Time**: Must not degrade from current baseline
 
-## Architecture Decisions (Planned)
-- **Conservative Approach**: Realistic 20-40% performance improvements vs. speculative 70-85%
-- **Risk-First Development**: Every change with comprehensive rollback procedures
-- **WSL2 Focus**: Platform-specific optimizations for Windows WSL2 only
-- **SpecKit Integration**: Built-in support for AI-driven development methodology
-- **Bilingual Support**: All documentation in both English and Japanese
+## Architecture Decisions (Revised)
+- **Incremental Approach**: Small, testable changes preserving all existing functionality
+- **Risk Minimization**: Every change immediately reversible with documented rollback
+- **Conservative Targets**: Realistic 10-30% improvements vs. speculative 70%+
+- **Baseline Preservation**: Existing working configuration at `../.devcontainer/` unchanged
+- **Function-First**: Performance secondary to maintaining proven functionality
 
-## File Structure
+## Current File Structure (Cleaned)
 ```
 specs/001-optimize-the-devcontainer/
-├── spec.md / spec-ja.md           # Feature specifications (bilingual)
-├── plan.md / plan-ja.md           # Implementation plan (bilingual)
-├── research.md / research-ja.md   # Technology research (bilingual)
-├── tasks.md / tasks-ja.md         # 24 implementation tasks (bilingual)
-├── quickstart.md / quickstart-ja.md # Setup guide (bilingual)
-├── data-model.md                  # Configuration data structures
-└── contracts/                     # API schemas and templates
-    ├── configuration-schema.yaml
-    ├── devcontainer-template.json
-    └── dockerfile-template.dockerfile
+├── spec.md / spec-ja.md           # Incremental optimization specifications (revised)
+└── [REMOVED]                      # All previous planning documents (outdated approach)
+
+../.devcontainer/                   # ACTUAL WORKING BASELINE
+├── Dockerfile                     # 183 lines, proven working
+├── devcontainer.json              # Complete configuration
+├── .p10k.zsh                      # Powerlevel10k theme (95KB)
+└── init-firewall.sh               # Network initialization
 ```
 
-## Implementation Phases (Ready to Start)
-1. **Phase 1** (Week 1): Measurement and Documentation
-2. **Phase 2** (Week 2-3): Build Optimization
-3. **Phase 3** (Week 3-4): Volume and Mount Performance
-4. **Phase 4** (Week 4-5): Validation and Testing
-5. **Phase 5** (Week 5-6): Team Rollout
-6. **Phase 6** (Week 7): GitHub Distribution and SpecKit Integration
+## Implementation Phases (Planned)
+1. **Phase 1**: Measurement and Backup (create baseline, backup procedures)
+2. **Phase 2**: Low-Risk Optimizations (.dockerignore, layer consolidation)
+3. **Phase 3**: Cache Implementation (npm/pip cache mounts)
+4. **Phase 4**: SpecKit Integration (project initialization scripts)
+5. **Phase 5**: Serena MCP Integration (MCP server management)
+6. **Phase 6**: GitHub Distribution Preparation (documentation, quick-start)
+7. **Phase 7**: Validation and Rollback Testing
 
-## Performance Goals (Conservative)
-- **Build Time**: 20-40% improvement from baseline
-- **Startup Time**: 10-25% improvement from baseline
-- **Resource Usage**: Minimal overhead while maintaining functionality
-- **Team Onboarding**: 30% reduction in setup time
+## Recent Accomplishments (2025-09-13)
+- **Specification Revision**: Complete rewrite focusing on incremental optimization
+- **Approach Correction**: Shifted from architectural changes to proven configuration enhancement
+- **File Cleanup**: Removed 23 outdated files from wrong approach
+- **Requirements Addition**: SpecKit, Serena MCP, and GitHub distribution support
+- **Risk Mitigation**: Conservative performance targets and rollback procedures
+
+## Implementation Constraints
+- **NO** changes to fundamental architecture or mount points
+- **NO** removal or modification of existing packages or tools
+- **NO** changes to user experience or terminal appearance
+- **NO** modification of Claude Code integration or configuration mounting
+- **ALL** changes must be incrementally testable and immediately reversible
 
 ## Next Steps
-1. Begin implementation with Task 1: Establish Performance Baselines
-2. Set up GitHub repository structure at https://github.com/ykm2006/claude-code-wsl2-devcontainer
-3. Create actual DevContainer configuration files
-4. Start conservative, incremental improvements with comprehensive testing
+1. **Create Implementation Plan** (plan.md) based on revised incremental approach
+2. **Document Rollback Procedures** for each optimization phase
+3. **Begin with Phase 1**: Measurement and backup of current working configuration
+4. **Incremental Testing**: Each change tested immediately against existing functionality
+
+## Success Criteria
+- Configuration builds faster and caches better while being **functionally identical** to current working setup
+- All existing tools, integrations, and workflows continue working exactly as before
+- SpecKit and Serena MCP integrations add value without disrupting existing functionality
+- Any optimization that breaks existing functionality will be immediately reverted
 
 ---
-*Updated: 2025-09-13 - Planning phase complete, ready for implementation*
+*Updated: 2025-09-13 - Specification revised for incremental optimization approach*
+*Session Complete: Ready for implementation planning phase*
