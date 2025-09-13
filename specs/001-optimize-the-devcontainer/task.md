@@ -159,43 +159,55 @@ This task list breaks down the DevContainer optimization implementation into spe
 
 ## Phase 2: Low-Risk Optimizations
 
-### Task 2.1: Implement .dockerignore
+### Task 2.1: Implement .dockerignore (🟢 Low Risk)
 **Duration**: 30 minutes
 **Dependencies**: Task 1.3
 **Assignee**: DevContainer Team
+**Risk Level**: LOW (🟢) - Immediate rollback possible
 
-**Objective**: Reduce build context size without affecting functionality
+**Objective**: Reduce build context from 116KB by 50-80% without affecting functionality
 
 **Actions**:
-- [ ] Create comprehensive .dockerignore file
-- [ ] Exclude git directories and version control files
-- [ ] Exclude IDE and editor files
-- [ ] Exclude build artifacts and cache directories
-- [ ] Exclude documentation and example files
-- [ ] Test build context size reduction
-- [ ] Verify no functionality impact
+- [ ] Create .dockerignore with research-based patterns
+- [ ] Exclude version control (.git, .gitignore)
+- [ ] Exclude development environments (.vscode/settings.json, .idea/, *.swp)
+- [ ] Exclude language-specific artifacts (node_modules/, __pycache__/, *.pyc)
+- [ ] Exclude security-sensitive files (.env, .env.*, *.local)
+- [ ] Preserve essential files (!.devcontainer/, !README.md)
+- [ ] Test build context size reduction (target: <60KB from 116KB)
+- [ ] Verify build success and functionality
 
 **Acceptance Criteria**:
-- .dockerignore created and optimized
-- Build context size measurably reduced
-- Build still completes successfully
-- All functionality preserved
+- [ ] .dockerignore created with 15+ optimized patterns
+- [ ] Build context reduced by 50-80% (target: <60KB)
+- [ ] Build completes successfully in <5 minutes
+- [ ] All DevContainer functionality preserved
+- [ ] Rollback procedure tested (rm .dockerignore)
 
-### Task 2.2: Optimize Dockerfile Layer Structure
-**Duration**: 60 minutes
+### Task 2.2: Enable BuildKit and Consolidate apt-get Operations (🟢 Low Risk)
+**Duration**: 45 minutes
 **Dependencies**: Task 2.1
 **Assignee**: DevContainer Team
+**Risk Level**: LOW (🟢) - Backward compatible, easy rollback
 
-**Objective**: Improve layer caching without changing packages
+**Objective**: Reduce 19 RUN commands and 4 apt-get update calls for 15-25% build improvement
 
 **Actions**:
-- [ ] Consolidate apt-get update calls
-- [ ] Group related package installations
-- [ ] Reorder layers for better caching
-- [ ] Combine compatible RUN commands
-- [ ] Test build time improvement
-- [ ] Verify identical package versions
+- [ ] Enable BuildKit in DevContainer configuration
+- [ ] Consolidate 4 apt-get operations into 2 optimized commands
+- [ ] Implement optimal apt-get pattern with cleanup
+- [ ] Group related system packages (basic tools + GitHub CLI)
+- [ ] Add --no-install-recommends flags consistently
+- [ ] Test build time improvement (target: 15-25% faster)
+- [ ] Verify identical package versions installed
 - [ ] Ensure no functionality regression
+
+**Acceptance Criteria**:
+- [ ] BuildKit enabled and functional
+- [ ] apt-get operations reduced from 4 to 2 commands
+- [ ] Build time improved by 15-25% from baseline
+- [ ] All 32 Python packages + system tools identical
+- [ ] Rollback procedure: git revert + unset DOCKER_BUILDKIT
 
 **Acceptance Criteria**:
 - Dockerfile layers optimized for caching
@@ -203,72 +215,102 @@ This task list breaks down the DevContainer optimization implementation into spe
 - Exact same packages and versions installed
 - No functionality changes or regressions
 
-### Task 2.3: Validate Phase 2 Results
-**Duration**: 30 minutes
+### Task 2.3: Implement Package Manager Cache Mounts (🟡 Medium Risk)
+**Duration**: 60 minutes
 **Dependencies**: Task 2.2
 **Assignee**: DevContainer Team
+**Risk Level**: MEDIUM (🟡) - Cache corruption possible, requires BuildKit
 
-**Objective**: Ensure optimizations work as expected
+**Objective**: Enable persistent npm/pip caching for 30-70% faster package operations
+
+**Actions**:
+- [ ] Add BuildKit cache mounts for npm cache
+- [ ] Add BuildKit cache mounts for pip cache
+- [ ] Update devcontainer.json with cache mount points
+- [ ] Remove --no-cache-dir flags from pip commands
+- [ ] Test cache persistence across rebuilds
+- [ ] Measure package installation improvement (target: 30-70%)
+- [ ] Verify cache sharing across multiple projects
+- [ ] Test cache corruption recovery
+
+**Acceptance Criteria**:
+- [ ] npm cache mount functional and persistent
+- [ ] pip cache mount functional and persistent
+- [ ] Package operations 30-70% faster on subsequent builds
+- [ ] Cache survives container rebuilds
+- [ ] Rollback procedure: remove cache mounts from devcontainer.json
+
+### Task 2.4: Validate Phase 2 Results
+**Duration**: 30 minutes
+**Dependencies**: Task 2.3
+**Assignee**: DevContainer Team
+
+**Objective**: Ensure all optimizations work as expected
 
 **Actions**:
 - [ ] Re-run all baseline measurement scripts
 - [ ] Compare results to Phase 1 baseline
-- [ ] Test all existing functionality
-- [ ] Verify Python packages, Node.js, Rust toolchains
-- [ ] Test terminal configuration
-- [ ] Document improvements achieved
+- [ ] Test all existing functionality comprehensively
+- [ ] Verify all 32 Python packages functional
+- [ ] Test Node.js, Claude Code, terminal configuration
+- [ ] Test cache mount persistence and performance
+- [ ] Document all improvements achieved
 
 **Acceptance Criteria**:
-- Performance improvements documented
-- No functionality regressions detected
-- All tools and configurations working
-- Phase 2 success criteria met
+- [ ] Build context reduced by 50-80%
+- [ ] Build time improved by 15-25%
+- [ ] Package operations improved by 30-70%
+- [ ] No functionality regressions detected
+- [ ] All tools and configurations working identically
+- [ ] Phase 2 success criteria met with measurements
 
-## Phase 3: Cache Implementation
+## Phase 3: Advanced Optimizations (Optional)
 
-### Task 3.1: Implement Package Manager Caches
+### Task 3.1: RUN Command Consolidation (🟡 Medium Risk)
 **Duration**: 90 minutes
-**Dependencies**: Task 2.3
+**Dependencies**: Task 2.4
 **Assignee**: DevContainer Team
+**Risk Level**: MEDIUM (🟡) - Debugging complexity increase
 
-**Objective**: Add persistent caching for npm and pip
+**Objective**: Reduce 19 RUN commands to 12-15 for 10-15% layer reduction
 
 **Actions**:
-- [ ] Create host cache directories
-- [ ] Update devcontainer.json with cache mounts
-- [ ] Configure npm cache mount point
-- [ ] Configure pip cache mount point
-- [ ] Test cache persistence across rebuilds
-- [ ] Measure package installation improvement
-- [ ] Verify multi-project compatibility
+- [ ] Analyze remaining RUN command consolidation opportunities
+- [ ] Consolidate user configuration commands (10 → 6-7 commands)
+- [ ] Group logically related operations while maintaining readability
+- [ ] Preserve error isolation for critical configuration steps
+- [ ] Test build time and debugging experience
+- [ ] Verify all 32 Python packages and tools functional
+- [ ] Document consolidation rationale and rollback procedure
 
 **Acceptance Criteria**:
-- Cache directories created and mounted
-- Subsequent package installations use cache
-- Measurable speed improvement in package operations
-- Cache works across multiple projects
-- No interference with existing functionality
+- [ ] RUN commands reduced from 19 to 12-15
+- [ ] Build time improved by additional 10-15%
+- [ ] All functionality preserved and testable
+- [ ] Debugging remains practical for development
+- [ ] Clear rollback procedure documented
 
-### Task 3.2: Test Cache Effectiveness
+### Task 3.2: Layer Ordering Optimization (🟡 Medium Risk)
 **Duration**: 45 minutes
 **Dependencies**: Task 3.1
 **Assignee**: DevContainer Team
+**Risk Level**: MEDIUM (🟡) - Build sequence dependencies
 
-**Objective**: Validate cache performance improvements
+**Objective**: Optimize layer ordering for better cache utilization
 
 **Actions**:
-- [ ] Clean build without cache
-- [ ] Rebuild with cache and measure improvement
-- [ ] Test npm install performance
-- [ ] Test pip install performance
-- [ ] Test cache behavior with different projects
-- [ ] Document cache hit rates and improvements
+- [ ] Reorder Dockerfile instructions by change frequency
+- [ ] Place static dependencies (system packages) first
+- [ ] Group dynamic content (user configuration) later
+- [ ] Test cache hit improvements with simulated changes
+- [ ] Verify build sequence still works correctly
+- [ ] Measure cache efficiency improvement
 
 **Acceptance Criteria**:
-- Cache provides measurable performance improvement
-- Package installation 15-30% faster
-- Cache works reliably across rebuilds
-- No cache-related errors or issues
+- [ ] Layer ordering optimized for cache efficiency
+- [ ] Cache hit ratio measurably improved
+- [ ] Build sequence remains functional
+- [ ] No dependency order violations
 
 ## Phase 4: SpecKit Integration
 
