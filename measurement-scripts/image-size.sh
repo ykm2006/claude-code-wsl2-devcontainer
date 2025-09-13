@@ -5,7 +5,11 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-DEVCONTAINER_DIR="$(cd "$SCRIPT_DIR/.." && pwd)/.devcontainer"
+
+# Use environment variable DEVCONTAINER_DIR if provided, otherwise default
+if [[ -z "$DEVCONTAINER_DIR" ]]; then
+    DEVCONTAINER_DIR="$(cd "$SCRIPT_DIR/.." && pwd)/.devcontainer"
+fi
 RESULTS_DIR="$SCRIPT_DIR/results"
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 

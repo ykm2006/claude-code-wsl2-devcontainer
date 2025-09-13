@@ -1,18 +1,47 @@
 #!/bin/bash
 # Master Measurement Script
 # Runs all measurement scripts and generates comprehensive report
+# Usage: ./run-all-measurements.sh [baseline|optimization]
 
 set -e
 
+# Parse mode argument (default: optimization)
+MODE=${1:-optimization}
+
+if [[ "$MODE" != "baseline" && "$MODE" != "optimization" ]]; then
+    echo "❌ Invalid mode: $MODE"
+    echo "Usage: $0 [baseline|optimization]"
+    echo "  baseline:     Measure original config with no cache"
+    echo "  optimization: Measure optimized config with cache"
+    exit 1
+fi
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 RESULTS_DIR="$SCRIPT_DIR/results"
-TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
+TIMESTAMP="${MODE}_$(date +"%Y%m%d_%H%M%S")"
+
+# Set DevContainer directory based on mode
+if [[ "$MODE" == "baseline" ]]; then
+    DEVCONTAINER_DIR="$HOME/WORK/.devcontainer"
+    echo "📁 Baseline mode: using original working configuration at $DEVCONTAINER_DIR"
+else
+    DEVCONTAINER_DIR="$(dirname "$SCRIPT_DIR")/.devcontainer"
+    echo "📁 Optimization mode: using test configuration at $DEVCONTAINER_DIR"
+fi
+
+# Verify DevContainer directory exists
+if [[ ! -d "$DEVCONTAINER_DIR" ]]; then
+    echo "❌ DevContainer directory not found: $DEVCONTAINER_DIR"
+    echo "   Please ensure the directory exists before running measurements"
+    exit 1
+fi
 
 # Create results directory
 mkdir -p "$RESULTS_DIR"
 
 echo "🔬 DevContainer Comprehensive Performance Measurement"
 echo "=================================================="
+echo "Mode: $MODE"
 echo "Timestamp: $(date)"
 echo "Results will be saved to: $RESULTS_DIR"
 echo ""
@@ -54,15 +83,17 @@ echo ""
 
 # Function to run measurement with error handling
 run_measurement() {
-    local script_name=$1
-    local description=$2
+    local script_command="$1"
+    local description="$2"
 
     echo "🔄 Running $description..."
 
-    # Create error log file
+    # Extract script name for error log (remove arguments)
+    local script_name=$(echo "$script_command" | cut -d' ' -f1)
     local error_log="$RESULTS_DIR/error_${script_name%.*}_$TIMESTAMP.log"
 
-    if bash "$SCRIPT_DIR/$script_name" 2>&1 | tee "$error_log.tmp"; then
+    # Pass DEVCONTAINER_DIR as environment variable and execute script with arguments
+    if DEVCONTAINER_DIR="$DEVCONTAINER_DIR" bash -c "cd '$SCRIPT_DIR' && bash $script_command" 2>&1 | tee "$error_log.tmp"; then
         echo "   ✅ $description completed successfully"
         # Move successful output to info log
         mv "$error_log.tmp" "${error_log%.*}_success.log"
@@ -90,7 +121,7 @@ echo "Starting comprehensive measurement suite..."
 echo ""
 
 run_measurement "image-size.sh" "Image Size Analysis"
-run_measurement "build-time.sh" "Build Time Measurement"
+run_measurement "build-time.sh $MODE" "Build Time Measurement ($MODE mode)"
 run_measurement "startup-time.sh" "Startup Time Measurement"
 run_measurement "package-speed.sh" "Package Installation Speed"
 run_measurement "resource-usage.sh" "Resource Usage Monitoring"
@@ -99,17 +130,31 @@ run_measurement "resource-usage.sh" "Resource Usage Monitoring"
 echo "📋 Generating Comprehensive Report"
 echo "=================================="
 
-REPORT_FILE="$RESULTS_DIR/baseline_report_$TIMESTAMP.md"
+REPORT_FILE="$RESULTS_DIR/${MODE}_report_$TIMESTAMP.md"
 
-cat > "$REPORT_FILE" << 'EOF'
-# DevContainer Performance Baseline Report
+cat > "$REPORT_FILE" << EOF
+# DevContainer Performance ${MODE^} Report
 
-**Generated**: $(date)
+**Generated**: \$(date)
 **Measurement Session**: $TIMESTAMP
+**Mode**: $MODE
 
 ## Executive Summary
 
-This report provides baseline performance measurements for the DevContainer optimization project. All measurements represent the current working configuration before any optimizations.
+This report provides $MODE performance measurements for the DevContainer optimization project.
+EOF
+
+if [[ "$MODE" == "baseline" ]]; then
+    cat >> "$REPORT_FILE" << 'EOF'
+All measurements represent the original working configuration with clean builds (no cache).
+EOF
+else
+    cat >> "$REPORT_FILE" << 'EOF'
+All measurements represent the optimized configuration with BuildKit and cache enabled.
+EOF
+fi
+
+cat >> "$REPORT_FILE" << 'EOF'
 
 ## Measurement Results
 
@@ -117,12 +162,16 @@ This report provides baseline performance measurements for the DevContainer opti
 EOF
 
 # Add build time results if available
-BUILD_JSON=$(ls "$RESULTS_DIR"/build_summary_*.json 2>/dev/null | tail -1 || echo "")
+BUILD_JSON=$(ls "$RESULTS_DIR"/build_summary_${MODE}_*.json 2>/dev/null | tail -1 || echo "")
 if [[ -n "$BUILD_JSON" && -f "$BUILD_JSON" ]]; then
     BUILD_AVG=$(jq -r '.measurements.build_time_avg' "$BUILD_JSON" 2>/dev/null || echo "N/A")
+    BUILDKIT_ENABLED=$(jq -r '.buildkit_enabled' "$BUILD_JSON" 2>/dev/null || echo "N/A")
+    CACHE_CLEARED=$(jq -r '.cache_cleared' "$BUILD_JSON" 2>/dev/null || echo "N/A")
     cat >> "$REPORT_FILE" << EOF
 - **Average Build Time**: ${BUILD_AVG}s
-- **Measurement Method**: 3 iterations with clean builds
+- **BuildKit Enabled**: ${BUILDKIT_ENABLED}
+- **Cache Cleared**: ${CACHE_CLEARED}
+- **Measurement Method**: 3 iterations
 EOF
 fi
 
