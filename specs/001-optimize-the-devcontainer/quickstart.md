@@ -1,7 +1,9 @@
 # DevContainer Optimization - Quick Start Guide
 
 ## Overview
-This guide will help you set up and validate the optimized DevContainer configuration for multi-project, multi-machine development environments.
+This guide outlines the setup and validation procedures for the optimized DevContainer configuration for multi-project, multi-machine development environments.
+
+**Note**: This is a planning document. The actual DevContainer implementation has not been created yet. This guide describes the expected behavior after implementation is complete.
 
 ## Prerequisites
 - Docker Desktop or Docker Engine installed
@@ -12,9 +14,9 @@ This guide will help you set up and validate the optimized DevContainer configur
 
 ### 1. Clone and Open Container
 ```bash
-# Clone the repository
-git clone <repository-url>
-cd <repository-name>
+# Clone the DevContainer configuration repository (once implemented)
+git clone https://github.com/ykm2006/claude-code-wsl2-devcontainer.git
+cd claude-code-wsl2-devcontainer
 
 # Open in VS Code
 code .
@@ -243,14 +245,14 @@ wslpath -w /workspace
 
 For issues or improvements:
 1. Check the troubleshooting section above
-2. Review logs in `/workspace/.devcontainer/logs/`
+2. Review logs in `/workspace/.devcontainer/logs/` (once implemented)
 3. Consult the full documentation in `research.md`
-4. Create an issue in the project repository
+4. Create an issue in the GitHub repository: https://github.com/ykm2006/claude-code-wsl2-devcontainer
 
-## Success Metrics
+## Expected Success Metrics
 
-After completing this quickstart, you should achieve:
-- **70-85% faster builds** through layer optimization
-- **60% faster container initialization** via performance tuning
+After implementation and completing this quickstart, you should achieve:
+- **20-40% faster builds** through layer optimization (conservative estimate)
+- **10-25% faster container initialization** via performance tuning
 - **Optimized experience** for Windows WSL2 environment
 - **Seamless Claude Code integration** for AI-assisted development

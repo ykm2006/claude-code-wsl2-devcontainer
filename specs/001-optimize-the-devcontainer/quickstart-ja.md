@@ -4,7 +4,9 @@
 > **Note**: This is a Japanese reference version. The official quickstart guide is the English version (`quickstart.md`).
 
 ## 概要
-このガイドは、マルチプロジェクト・マルチマシン開発環境向けに最適化されたDevContainer設定のセットアップと検証を支援します。
+このガイドは、マルチプロジェクト・マルチマシン開発環境向けに最適化されたDevContainer設定のセットアップと検証手順を説明します。
+
+**注意**: これは計画文書です。実際のDevContainer実装はまだ作成されていません。このガイドは実装完了後の期待される動作を記述しています。
 
 ## 前提条件
 - Docker DesktopまたはDocker Engineがインストール済み
@@ -15,9 +17,9 @@
 
 ### 1. クローンとコンテナオープン
 ```bash
-# リポジトリをクローン
-git clone <repository-url>
-cd <repository-name>
+# DevContainer設定リポジトリをクローン（実装後）
+git clone https://github.com/ykm2006/claude-code-wsl2-devcontainer.git
+cd claude-code-wsl2-devcontainer
 
 # VS Codeで開く
 code .
@@ -245,14 +247,14 @@ wslpath -w /workspace
 
 問題や改善について：
 1. 上記のトラブルシューティングセクションを確認
-2. `/workspace/.devcontainer/logs/` のログを確認
+2. `/workspace/.devcontainer/logs/` のログを確認（実装後）
 3. `research.md` の完全なドキュメントを参照
-4. プロジェクトリポジトリでissueを作成
+4. GitHubリポジトリでissueを作成: https://github.com/ykm2006/claude-code-wsl2-devcontainer
 
-## 成功指標
+## 期待される成功指標
 
-このクイックスタートを完了した後、以下を達成できるはずです：
-- **70-85%高速なビルド** レイヤー最適化による
-- **60%高速なコンテナ初期化** パフォーマンスチューニングによる
+実装完了後、このクイックスタートを完了した際に以下を達成できるはずです：
+- **20-40%高速なビルド** レイヤー最適化による（保守的見積もり）
+- **10-25%高速なコンテナ初期化** パフォーマンスチューニングによる
 - **Windows WSL2環境での最適化された体験**
 - **AI支援開発のためのシームレスなClaude Code統合**
