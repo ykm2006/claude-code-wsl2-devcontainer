@@ -1,0 +1,49 @@
+{
+  "timestamp": "20250913_221816",
+  "environment": "devcontainer",
+  "platform": "Linux a76fde8e1025 6.6.87.2-microsoft-standard-WSL2 #1 SMP PREEMPT_DYNAMIC Thu Jun  5 18:30:46 UTC 2025 x86_64 GNU/Linux",
+  "node_version": "v20.19.5",
+  "npm_version": "10.8.2",
+  "python_version": "Python 3.9.2",
+  "measurements": {
+    "file_write_1000": Measuring: Write 1000 files
+Duration: .063942573s
+
+.063942573,
+    "file_read_1000": Measuring: Read 1000 files
+Duration: 1.008828574s
+
+1.008828574,
+    "file_delete_1000": Measuring: Delete 1000 files
+Duration: .025052032s
+
+.025052032,
+    "npm_install": Measuring: NPM Install (5 packages)
+Duration: 1.156967762s
+
+1.156967762,
+    "npm_ci": Measuring: NPM CI (clean install)
+Duration: .951366202s
+
+.951366202,
+    "git_clone_shallow": Measuring: Git Clone (shallow)
+Duration: .652401909s
+
+.652401909,
+    "typescript_compile": Measuring: TypeScript Compile (10 files)
+Duration: .001750123s
+
+.001750123,
+    "python_fibonacci_30": 0.11982202529907227,
+    "memory_available_gb": 60.4,
+    "cpu_cores": 16
+  },
+  "summary": {
+    "io_operations_per_second": .063942573,
+    "npm_package_install_rate": 1.156967762,
+    "typescript_files_per_second": .001750123,
+    "environment": "devcontainer_internal",
+    "total_io_time": .025052032,
+    "total_npm_time": .951366202
+  }
+}
