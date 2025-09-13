@@ -10,7 +10,7 @@ This project provides incremental optimization of existing working DevContainer 
 **Target Platform**: Windows WSL2 (exclusive focus)
 
 ## Current Working Configuration (Baseline)
-- **Location**: `~/WORK/.devcontainer/` (183-line Dockerfile, complete devcontainer.json)
+- **Location**: `~/WORK/.devcontainer/` (WSL2 host) → `/workspace/.devcontainer/` (DevContainer mount) - (183-line Dockerfile, complete devcontainer.json)
 - **Status**: Fully functional and proven across 3 machines
 - **Base Image**: Node.js 20 on Debian Bullseye
 - **Shell**: Zsh with Powerlevel10k theme (complete .p10k.zsh configuration)
@@ -42,7 +42,7 @@ This project provides incremental optimization of existing working DevContainer 
 - **Incremental Approach**: Small, testable changes preserving all existing functionality
 - **Risk Minimization**: Every change immediately reversible with documented rollback
 - **Conservative Targets**: Realistic 10-30% improvements vs. speculative 70%+
-- **Baseline Preservation**: Existing working configuration at `../.devcontainer/` unchanged
+- **Baseline Preservation**: Existing working configuration at `/workspace/.devcontainer/` unchanged
 - **Function-First**: Performance secondary to maintaining proven functionality
 
 ## Documentation Structure
@@ -57,7 +57,7 @@ specs/001-optimize-the-devcontainer/
 ├── rollback-procedures.md         # Rollback documentation (English) - Complete
 └── rollback-procedures-ja.md      # Rollback documentation (Japanese) - Complete
 
-../.devcontainer/                   # ACTUAL WORKING BASELINE (Unchanged)
+/workspace/.devcontainer/           # ACTUAL WORKING BASELINE (Unchanged)
 ├── Dockerfile                     # 183 lines, proven working
 ├── devcontainer.json              # Complete configuration
 ├── .p10k.zsh                      # Powerlevel10k theme (95KB)
