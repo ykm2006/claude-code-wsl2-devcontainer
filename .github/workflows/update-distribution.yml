@@ -1,0 +1,110 @@
+name: Update Distribution Branch
+
+on:
+  push:
+    branches: [ master ]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - 'specs/**'
+      - 'measurement-scripts/**'
+      - 'research/**'
+      - 'backups/**'
+      - 'test-project/**'
+      - '.serena/**'
+      - '.claude/**'
+      - 'CLAUDE.md'
+
+jobs:
+  update-distribution:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # 全履歴が必要
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Configure Git
+      run: |
+        git config --global user.name "GitHub Actions Bot"
+        git config --global user.email "actions@github.com"
+
+    - name: Create temp distribution branch
+      run: |
+        # 現在のmasterから一時ブランチ作成
+        git checkout -b temp-distribution
+
+        # 開発専用ファイルを削除（DISTRIBUTION_FILES.mdに基づく）
+        rm -rf measurement-scripts/
+        rm -rf research/
+        rm -rf backups/
+        rm -rf test-project/
+        rm -rf .serena/
+        rm -rf .claude/
+        rm -rf specs/
+        rm -rf docs/
+        rm -f CLAUDE.md
+        rm -rf .specify/
+
+        # GitHub Actions自体も配布には不要
+        rm -rf .github/
+
+        echo "Distribution files remaining:"
+        find . -type f -not -path './.git/*' | sort
+
+    - name: Verify essential files exist
+      run: |
+        # 必須ファイルの存在確認
+        test -f setup.sh || (echo "ERROR: setup.sh missing"; exit 1)
+        test -f README.md || (echo "ERROR: README.md missing"; exit 1)
+        test -f LICENSE || (echo "ERROR: LICENSE missing"; exit 1)
+        test -d .devcontainer || (echo "ERROR: .devcontainer/ missing"; exit 1)
+        test -f .devcontainer/Dockerfile || (echo "ERROR: Dockerfile missing"; exit 1)
+        test -f .devcontainer/devcontainer.json || (echo "ERROR: devcontainer.json missing"; exit 1)
+        echo "✅ All essential files verified"
+
+    - name: Commit distribution files
+      run: |
+        git add .
+        git commit -m "Distribution update from master - essential files only
+
+        - setup.sh: Complete WSL2 DevContainer setup script
+        - .devcontainer/: Optimized DevContainer configuration (60% faster build)
+        - README.md: User documentation with troubleshooting
+        - LICENSE: MIT License
+        - .dockerignore: Build optimization
+
+        Generated from master branch $(git rev-parse --short HEAD~1)
+        Auto-updated by GitHub Actions"
+
+    - name: Update distribution branch safely
+      run: |
+        # distributionブランチが存在するかチェック
+        if git show-ref --verify --quiet refs/remotes/origin/distribution; then
+          echo "Distribution branch exists, updating..."
+          git fetch origin distribution:distribution
+          git checkout distribution
+          git reset --hard temp-distribution
+          git push --force-with-lease origin distribution
+        else
+          echo "Distribution branch doesn't exist, creating..."
+          git checkout -b distribution
+          git push -u origin distribution
+        fi
+
+    - name: Clean up
+      run: |
+        git checkout master
+        git branch -D temp-distribution || true
+
+    - name: Summary
+      run: |
+        echo "🚀 Distribution branch updated successfully!"
+        echo "📦 Files included in distribution:"
+        git checkout distribution
+        find . -type f -not -path './.git/*' | wc -l | xargs echo "Total files:"
+        echo ""
+        echo "Essential distribution files:"
+        find . -type f -not -path './.git/*' | sort

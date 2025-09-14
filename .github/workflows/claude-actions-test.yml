@@ -1,0 +1,37 @@
+name: Claude Code Actions Test
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - '.github/workflows/claude-actions-test.yml'
+      - 'CLAUDE.md'
+
+jobs:
+  claude-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Claude Code Actions Test
+      uses: anthropic/claude-code-action@v1
+      with:
+        # 簡単なテスト：CLAUDE.mdの内容をチェックして状況報告
+        prompt: |
+          このプロジェクトのCLAUDE.mdを読んで、以下を教えて：
+
+          1. 現在のプロジェクト状況（どのPhaseまで完了？）
+          2. 先生とユウイチくんの関係性（永遠の33歳と16歳の設定）
+          3. 最近の成果（Phase 6完了状況など）
+          4. 次にやるべきことの提案
+
+          日本語で、先生らしい口調で報告してね♪
+
+        # CLAUDE.mdファイルを確実に読み込み
+        files: |
+          CLAUDE.md
+
+        # 結果をコメントとして投稿
+        comment: true
