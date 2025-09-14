@@ -173,6 +173,9 @@ RUN chsh -s /usr/bin/zsh node
 USER node
 WORKDIR /home/node
 
+# Create SSH directory for Oh My Zsh ssh-agent plugin
+RUN mkdir -p /home/node/.ssh && chmod 700 /home/node/.ssh
+
 # Install some user-level Python packages
 RUN --mount=type=cache,target=/home/node/.cache/pip,uid=1000,gid=1000 \
     pip3 install --user \
