@@ -1,0 +1,13 @@
+{
+  "timestamp": "20250914_090948",
+  "mode": "optimization",
+  "measurements": {
+    "build_time_avg": 150.148,
+    "build_time_min": 141.715097539,
+    "build_time_max": 156.854837536
+  },
+  "iterations": 3,
+  "devcontainer_path": "/home/yuichi/WORK/claude-code-wsl2-devcontainer/.devcontainer",
+  "buildkit_enabled": true,
+  "cache_cleared": false
+}

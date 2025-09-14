@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1
 FROM node:20-bullseye
 
 ARG TZ
@@ -53,10 +54,12 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | d
 RUN ln -s /usr/bin/python3 /usr/local/bin/python
 
 # Upgrade pip and install basic Python packages
-RUN python3 -m pip install --upgrade pip setuptools wheel
+RUN --mount=type=cache,target=/root/.cache/pip \
+    python3 -m pip install --upgrade pip setuptools wheel
 
 # Install commonly used Python packages
-RUN pip3 install --no-cache-dir \
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip3 install \
     requests \
     numpy \
     pandas \
@@ -119,7 +122,8 @@ RUN git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/cust
 USER root
 
 # Install Claude Code CLI
-RUN npm install -g @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}
+RUN --mount=type=cache,target=/root/.npm \
+    npm install -g @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}
 
 # Setup firewall script and copy p10k config
 COPY init-firewall.sh /usr/local/bin/init-firewall.sh
@@ -167,7 +171,8 @@ USER node
 WORKDIR /home/node
 
 # Install some user-level Python packages
-RUN pip3 install --user \
+RUN --mount=type=cache,target=/home/node/.cache/pip,uid=1000,gid=1000 \
+    pip3 install --user \
     poetry \
     pipenv \
     virtualenvwrapper
