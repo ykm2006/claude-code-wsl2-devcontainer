@@ -1,8 +1,0 @@
-🚀 DevContainer Startup Time Measurement
-========================================
-Timestamp: Sun Sep 14 01:41:56 JST 2025
-DevContainer: /workspace/claude-code-wsl2-devcontainer/.devcontainer
-
-Running 5 startup iterations for accurate measurement...
-📏 Startup iteration 1/5...
-/home/yuichi/WORK/claude-code-wsl2-devcontainer/measurement-scripts/startup-time.sh: line 27: cd: /workspace/claude-code-wsl2-devcontainer/.devcontainer: No such file or directory
