@@ -187,5 +187,8 @@ RUN --mount=type=cache,target=/home/node/.cache/pip,uid=1000,gid=1000 \
 RUN mkdir -p /home/node/.local/bin
 COPY --chown=node:node --chmod=755 init-speckit.sh /home/node/.local/bin/init-speckit
 
+# Serena MCP integration
+COPY --chown=node:node --chmod=755 init-serena-mcp.sh /home/node/.local/bin/init-serena-mcp
+
 # Set default working directory
 WORKDIR /workspace
