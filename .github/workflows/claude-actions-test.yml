@@ -1,11 +1,10 @@
-name: Claude Code Actions Test
+# DISABLED: Claude Code Actions test workflow (action not found)
+# TODO: Research correct Claude Code Actions setup method
+name: Claude Code Actions Test (DISABLED)
 
 on:
-  push:
-    branches: [ master ]
-    paths:
-      - '.github/workflows/claude-actions-test.yml'
-      - 'CLAUDE.md'
+  # Disabled until correct action name is found
+  workflow_dispatch:
 
 jobs:
   claude-test:

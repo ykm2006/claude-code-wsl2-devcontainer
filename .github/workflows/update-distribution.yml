@@ -4,7 +4,6 @@ on:
   push:
     branches: [ master ]
     paths-ignore:
-      - '**.md'
       - 'docs/**'
       - 'specs/**'
       - 'measurement-scripts/**'
@@ -13,7 +12,7 @@ on:
       - 'test-project/**'
       - '.serena/**'
       - '.claude/**'
-      - 'CLAUDE.md'
+      # CLAUDE.md変更は除外するが、README.mdなど重要なファイルは含める
 
 jobs:
   update-distribution:
