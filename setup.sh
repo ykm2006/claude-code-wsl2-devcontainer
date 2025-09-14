@@ -128,14 +128,22 @@ setup_devcontainer() {
 setup_claude_auth() {
     log_info "Setting up Claude Code authentication..."
 
-    if [ -f "$HOME/.claude.json" ]; then
-        log_success "Claude configuration already exists at ~/.claude.json"
-        return
+    # Create necessary Claude directories and files for DevContainer mounting
+    # This prevents mount errors when starting DevContainer
+    if [ ! -d "$HOME/.claude" ]; then
+        mkdir -p "$HOME/.claude"
+        log_info "Created Claude directory: $HOME/.claude"
     fi
 
-    log_warning "Claude authentication not found."
-    log_info "You'll need to set up Claude Code authentication manually."
-    log_info "Run 'claude auth' after the setup completes."
+    if [ ! -f "$HOME/.claude.json" ]; then
+        # Create empty .claude.json to prevent mount errors
+        echo '{}' > "$HOME/.claude.json"
+        log_info "Created placeholder .claude.json file"
+        log_warning "Claude authentication not configured yet."
+        log_info "Run 'claude auth' after DevContainer starts to authenticate."
+    else
+        log_success "Claude configuration already exists at ~/.claude.json"
+    fi
 
     # Create basic directories for Claude if they don't exist
     mkdir -p "$CLAUDE_CONFIG_DIR"
