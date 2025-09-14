@@ -244,10 +244,49 @@ specs/001-optimize-the-devcontainer/
 **Phase 1**: ✅ COMPLETE - All baseline measurements, documentation, and backup procedures finished
 **Phase 2**: ✅ COMPLETE - All four tasks (2.1-2.4) implemented, tested, and validated with 57% improvement
 **Phase 3**: ✅ COMPLETE - Task 3.1 ✅ COMPLETE, Task 3.2 ❌ ROLLED BACK
-**Current Branch**: `phase3-complete` (Task 3.1 final stable state)
-**Latest Status**: **Task 3.2 Rolled Back**: Layer ordering caused 5% performance degradation (146.6s vs 139.7s)
+**Phase 4**: ✅ COMPLETE - SpecKit integration successfully implemented and tested
+**Current Branch**: `phase4-speckit-integration`
+**Latest Achievement**: SpecKit integration fully functional with uv/uvx pre-installed
 **Cumulative Performance**: **60% total build time improvement** maintained (351.3s → 139.7s)
-**Current Status**: Phase 3 finalized at Task 3.1, ready for Phase 4 planning
+**Current Status**: Ready for merge to master branch
+
+## Phase 4 Complete - SpecKit Integration (2025-09-14)
+### ✅ Task 4.1: SpecKit Integration Implementation COMPLETE
+**Status**: ✅ COMPLETE - Implementation successful and tested
+**Branch**: `phase4-speckit-integration`
+**Implementation Date**: 2025-09-14
+**Latest Update**: 2025-01-26 - Fixed COPY permission issue
+
+**Implementation Complete**:
+- **✅ Improved Script Created**: `init-speckit.sh` with flexible usage patterns
+  - Default: Initialize SpecKit in existing project (current directory)
+  - With argument: Create new project with SpecKit
+  - `--help` option for usage guidance
+- **✅ Script Features**:
+  - Automatic `uv` package manager installation if needed
+  - Git repository validation for existing projects
+  - New project creation with git init
+  - Claude AI integration (`--ai claude` flag)
+- **✅ Dockerfile Integration**:
+  - Script placed in `.devcontainer/init-speckit.sh`
+  - Installed to `/home/node/.local/bin/init-speckit` (standardized location)
+  - uv/uvx pre-installed to `/home/node/.local/bin/` (no runtime installation needed)
+  - PATH updated in both `.bashrc` and `.zshrc` to include `/home/node/.local/bin`
+  - Fixed: COPY command now uses `--chown=node:node --chmod=755` for proper permissions
+
+**Recent Updates** (2025-09-14):
+- **Standardization**: All user tools (uv, uvx, init-speckit) now in `/home/node/.local/bin`
+- **Pre-installation**: uv package manager installed during container build (no runtime delay)
+- **PATH Consistency**: `/home/node/.local/bin` added to PATH for both bash and zsh
+- **Result**: Cleaner architecture with standard Linux user tool locations
+
+**Test Results** (2025-09-14):
+- **✅ Build Testing**: Container builds successfully with SpecKit integration
+- **✅ uv/uvx Installation**: Pre-installed and functional at `/home/node/.local/bin`
+- **✅ init-speckit Command**: Available and working correctly
+- **✅ SpecKit Initialization**: Successfully tested with new project creation
+- **✅ Performance**: 21ms package installation (19 packages)
+- **✅ Integration**: Claude AI assistant auto-selected, all features working
 
 ### ❌ Task 3.2: Layer Ordering Optimization ROLLED BACK
 **Status**: ❌ ROLLED BACK - Performance regression detected

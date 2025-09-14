@@ -123,6 +123,14 @@ USER root
 RUN --mount=type=cache,target=/root/.npm \
     npm install -g @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}
 
+# Install uv package manager for SpecKit to node user's .local/bin
+RUN mkdir -p /home/node/.local/bin && \
+    curl -LsSf https://astral.sh/uv/install.sh | sh && \
+    mv /root/.local/bin/uv /home/node/.local/bin/uv && \
+    mv /root/.local/bin/uvx /home/node/.local/bin/uvx && \
+    chown -R node:node /home/node/.local && \
+    chmod 755 /home/node/.local/bin/uv /home/node/.local/bin/uvx
+
 # Setup firewall script and copy p10k config
 COPY init-firewall.sh /usr/local/bin/init-firewall.sh
 COPY .p10k.zsh /home/node/.p10k.zsh
@@ -137,7 +145,7 @@ RUN chmod +x /usr/local/bin/init-firewall.sh && \
     chown -R node:node /home/node/.virtualenvs
 
 # Configure shell configuration files for node user
-RUN echo 'export PATH=/home/node/.npm-global/bin:$PATH' >> /home/node/.bashrc && \
+RUN echo 'export PATH=/home/node/.npm-global/bin:/home/node/.local/bin:/home/node/bin:$PATH' >> /home/node/.bashrc && \
     echo 'export NPM_CONFIG_PREFIX=/home/node/.npm-global' >> /home/node/.bashrc && \
     echo 'export PYTHONPATH=/workspace:$PYTHONPATH' >> /home/node/.bashrc && \
     echo 'export PIP_USER=0' >> /home/node/.bashrc && \
@@ -146,7 +154,7 @@ RUN echo 'export PATH=/home/node/.npm-global/bin:$PATH' >> /home/node/.bashrc &&
     echo 'ZSH_THEME="powerlevel10k/powerlevel10k"' >> /home/node/.zshrc && \
     echo 'plugins=(git ssh-agent zsh-autosuggestions zsh-syntax-highlighting)' >> /home/node/.zshrc && \
     echo 'source $ZSH/oh-my-zsh.sh' >> /home/node/.zshrc && \
-    echo 'export PATH=/home/node/.npm-global/bin:$PATH' >> /home/node/.zshrc && \
+    echo 'export PATH=/home/node/.npm-global/bin:/home/node/.local/bin:/home/node/bin:$PATH' >> /home/node/.zshrc && \
     echo 'export NPM_CONFIG_PREFIX=/home/node/.npm-global' >> /home/node/.zshrc && \
     echo 'export PYTHONPATH=/workspace:$PYTHONPATH' >> /home/node/.zshrc && \
     echo 'export PIP_USER=0' >> /home/node/.zshrc && \
@@ -171,6 +179,10 @@ RUN --mount=type=cache,target=/home/node/.cache/pip,uid=1000,gid=1000 \
     poetry \
     pipenv \
     virtualenvwrapper
+
+# GitHub SpecKit integration
+RUN mkdir -p /home/node/.local/bin
+COPY --chown=node:node --chmod=755 init-speckit.sh /home/node/.local/bin/init-speckit
 
 # Set default working directory
 WORKDIR /workspace

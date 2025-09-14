@@ -359,41 +359,42 @@ This task list breaks down the DevContainer optimization implementation into spe
 
 ---
 
-## Phase 4: SpecKit Integration
+## Phase 4: SpecKit Integration - ✅ COMPLETED
 
-### Task 4.1: Install uv Package Manager
-**Duration**: 30 minutes
+### Task 4.1: SpecKit Integration Implementation - ✅ COMPLETED
+**Duration**: 90 minutes (Actual: 120 minutes including testing)
 **Dependencies**: Phase 3 Complete (Task 3.1 stable state)
 **Assignee**: DevContainer Team
+**Completed**: 2025-09-14 11:26 JST
 
-**Objective**: Add uv package manager for SpecKit support
+**Objective**: Add GitHub SpecKit with uv package manager for AI-assisted development
 
 **Actions**:
-- [ ] Add uv installation to Dockerfile
-- [ ] Configure PATH for uv executable
-- [ ] Test uv installation and functionality
-- [ ] Verify uv works in container environment
-- [ ] Create verification script
+- [✅] Create flexible `init-speckit.sh` script with usage patterns
+- [✅] Add uv/uvx installation to Dockerfile (pre-installed at build time)
+- [✅] Configure PATH for `/home/node/.local/bin` in both bash and zsh
+- [✅] Install script to standardized location with proper permissions
+- [✅] Fix COPY permission issue with `--chown=node:node --chmod=755`
+- [✅] Test SpecKit initialization in new project
+- [✅] Verify uv/uvx functionality (21ms for 19 packages)
+- [✅] Confirm Claude AI integration auto-selection
 
 **Acceptance Criteria**:
-- uv package manager installed and functional
-- uv available in PATH
-- Installation verified and tested
+- [✅] uv/uvx pre-installed and functional at `/home/node/.local/bin`
+- [✅] init-speckit command available and working
+- [✅] SpecKit successfully initializes projects with `.specify/` structure
+- [✅] Performance: 21ms package installation verified
+- [✅] Claude AI integration confirmed working
 
-### Task 4.2: Implement SpecKit Integration
-**Duration**: 60 minutes
-**Dependencies**: Task 4.1
-**Assignee**: DevContainer Team
-
-**Objective**: Add GitHub SpecKit for AI-assisted development
-
-**Actions**:
-- [ ] Create SpecKit initialization script
-- [ ] Add SpecKit script to DevContainer
-- [ ] Test SpecKit project initialization
-- [ ] Verify Claude Code integration works
-- [ ] Test `.specify/` directory creation
-- [ ] Validate `/specify`, `/plan`, `/tasks` commands
+**Test Results**:
+- [✅] Successfully created test project with `init-speckit`
+- [✅] All SpecKit features functional (specs, plans, tasks templates)
+- [✅] Integration with Claude Code verified
+- [✅] No runtime installation delays (pre-installed)
+- [✅] SpecKit ASCII art displayed correctly
+- [✅] Template files extracted (22 entries, 6 scripts made executable)
+- [✅] Claude AI assistant auto-selected
+- [✅] Project structure created: `.specify/` with memory/, scripts/, specs/, templates/`
 
 **Acceptance Criteria**:
 - SpecKit initialization script functional
