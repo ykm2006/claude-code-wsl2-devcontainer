@@ -150,19 +150,12 @@ setup_claude_auth() {
     log_info "Created Claude configuration directory: $CLAUDE_CONFIG_DIR"
 }
 
-# Launch VS Code
-launch_vscode() {
-    log_info "Launching VS Code with DevContainer..."
-
-    cd "$WORK_DIR"
-
-    # Open VS Code in the WORK directory
-    log_info "Opening $WORK_DIR in VS Code..."
-    code .
-
-    log_success "VS Code launched!"
-    log_info "In VS Code, you should see a notification to 'Reopen in Container'"
-    log_info "Click that notification to start the optimized DevContainer"
+# VS Code launch instructions (user manual control)
+show_vscode_instructions() {
+    log_info "Setup complete! VS Code launch instructions:"
+    log_info "To open your workspace in VS Code:"
+    log_info "  cd ~/WORK && code ."
+    log_info "Then click 'Reopen in Container' when VS Code prompts you"
 }
 
 # Print final instructions
@@ -171,10 +164,11 @@ print_final_instructions() {
     log_success "=== Setup Complete! ==="
     echo
     log_info "Next steps:"
-    echo "1. In VS Code, click 'Reopen in Container' when prompted"
-    echo "2. Wait for DevContainer to build (optimized - 60% faster!)"
-    echo "3. Run 'claude auth' to set up Claude Code authentication"
-    echo "4. Start coding with AI assistance!"
+    echo "1. cd ~/WORK && code . (to open your workspace in VS Code)"
+    echo "2. Click 'Reopen in Container' when VS Code prompts you"
+    echo "3. Wait for DevContainer to build (optimized - 60% faster!)"
+    echo "4. Run 'claude auth' to set up Claude Code authentication"
+    echo "5. Start coding with AI assistance!"
     echo
     log_info "Available tools in DevContainer:"
     echo "• Claude Code - AI coding assistant"
@@ -199,7 +193,7 @@ main() {
     create_work_directory
     setup_devcontainer
     setup_claude_auth
-    launch_vscode
+    show_vscode_instructions
     print_final_instructions
 }
 
