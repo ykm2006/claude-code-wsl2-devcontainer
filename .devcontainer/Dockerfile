@@ -123,8 +123,13 @@ USER root
 RUN --mount=type=cache,target=/root/.npm \
     npm install -g @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}
 
-# Setup directories for node user (moved before COPY for better caching)
-RUN mkdir -p /usr/local/share/npm-global && \
+# Setup firewall script and copy p10k config
+COPY init-firewall.sh /usr/local/bin/init-firewall.sh
+COPY .p10k.zsh /home/node/.p10k.zsh
+# Setup permissions and directories for node user
+RUN chmod +x /usr/local/bin/init-firewall.sh && \
+    chown node:node /home/node/.p10k.zsh && \
+    mkdir -p /usr/local/share/npm-global && \
     chown -R node:node /usr/local/share && \
     mkdir -p /home/node/.npm-global && \
     chown -R node:node /home/node/.npm-global && \
@@ -166,17 +171,6 @@ RUN --mount=type=cache,target=/home/node/.cache/pip,uid=1000,gid=1000 \
     poetry \
     pipenv \
     virtualenvwrapper
-
-# Switch back to root for file copy operations
-USER root
-
-# Copy configuration files (moved to end for better cache utilization)
-COPY init-firewall.sh /usr/local/bin/init-firewall.sh
-COPY .p10k.zsh /home/node/.p10k.zsh
-
-# Setup final permissions for copied files
-RUN chmod +x /usr/local/bin/init-firewall.sh && \
-    chown node:node /home/node/.p10k.zsh
 
 # Set default working directory
 WORKDIR /workspace
