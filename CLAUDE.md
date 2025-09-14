@@ -243,11 +243,33 @@ specs/001-optimize-the-devcontainer/
 ## Current Session Status (2025-09-14)
 **Phase 1**: ✅ COMPLETE - All baseline measurements, documentation, and backup procedures finished
 **Phase 2**: ✅ COMPLETE - All four tasks (2.1-2.4) implemented, tested, and validated with 57% improvement
-**Phase 3**: ✅ TASK 3.1 COMPLETE - RUN consolidation successful with exceptional results
-**Current Branch**: `phase3-task3.1-run-consolidation` (ready for merge)
-**Latest Achievement**: **Task 3.1 Complete**: 17 → 14 RUN commands (3 consolidated), **7% additional improvement**
-**Cumulative Performance**: **60% total build time improvement** (351.3s → 139.7s)
-**Next Action**: **Commit and merge** - Task 3.1 exceeded all performance targets
+**Phase 3**: ✅ COMPLETE - Task 3.1 ✅ COMPLETE, Task 3.2 ❌ ROLLED BACK
+**Current Branch**: `phase3-complete` (Task 3.1 final stable state)
+**Latest Status**: **Task 3.2 Rolled Back**: Layer ordering caused 5% performance degradation (146.6s vs 139.7s)
+**Cumulative Performance**: **60% total build time improvement** maintained (351.3s → 139.7s)
+**Current Status**: Phase 3 finalized at Task 3.1, ready for Phase 4 planning
+
+### ❌ Task 3.2: Layer Ordering Optimization ROLLED BACK
+**Status**: ❌ ROLLED BACK - Performance regression detected
+**Duration**: Implemented, tested, and rolled back (2025-09-14)
+**Branch**: `phase3-task3.2-layer-ordering` (deleted)
+**Risk Level**: LOW (🟢) - Configuration file placement optimization
+
+**Objective**: Optimize Docker layer ordering for better cache utilization during config file changes
+
+**Implementation Attempted**:
+- **COPY Commands Relocated**: Moved COPY operations (init-firewall.sh, .p10k.zsh) to end of Dockerfile
+- **Directory Setup Optimization**: Moved mkdir/chown operations before COPY for better caching
+- **Permission Consolidation**: Consolidated file permissions setup after COPY operations
+
+**Performance Results**:
+- **Task 3.1 Baseline**: 139.7s average build time
+- **Task 3.2 Result**: 146.6s average build time
+- **Performance Impact**: **5% degradation** (+6.9 seconds)
+- **Root Cause**: Layer reordering conflicted with Docker's internal optimization
+
+**Resolution**: Complete rollback to Task 3.1 stable state
+**Lesson Learned**: Layer ordering optimizations require careful validation against actual build performance
 
 ### ⚠️ Important Testing Requirements
 **DevContainer Environment Limitations**:
