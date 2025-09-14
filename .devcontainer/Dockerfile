@@ -108,15 +108,13 @@ RUN usermod -aG sudo node && \
 USER node
 WORKDIR /home/node
 
-# Install Oh My Zsh manually (more reliable method)
+# Install Oh My Zsh with plugins and Powerlevel10k theme
 RUN rm -rf ~/.oh-my-zsh && \
     git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh && \
-    chmod 755 ~/.oh-my-zsh
-
-# Install zsh plugins and Powerlevel10k theme as node user
-RUN git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions \
-  && git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting \
-  && git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.oh-my-zsh/custom/themes/powerlevel10k
+    chmod 755 ~/.oh-my-zsh && \
+    git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions && \
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting && \
+    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.oh-my-zsh/custom/themes/powerlevel10k
 
 # Switch back to root for remaining installation steps
 USER root
@@ -128,40 +126,37 @@ RUN --mount=type=cache,target=/root/.npm \
 # Setup firewall script and copy p10k config
 COPY init-firewall.sh /usr/local/bin/init-firewall.sh
 COPY .p10k.zsh /home/node/.p10k.zsh
+# Setup permissions and directories for node user
 RUN chmod +x /usr/local/bin/init-firewall.sh && \
-    chown node:node /home/node/.p10k.zsh
-
-# Ensure node user has proper permissions
-RUN mkdir -p /usr/local/share/npm-global && \
+    chown node:node /home/node/.p10k.zsh && \
+    mkdir -p /usr/local/share/npm-global && \
     chown -R node:node /usr/local/share && \
     mkdir -p /home/node/.npm-global && \
     chown -R node:node /home/node/.npm-global && \
     mkdir -p /home/node/.virtualenvs && \
     chown -R node:node /home/node/.virtualenvs
 
-# Configure .bashrc for node user (done as root to avoid permission issues)
+# Configure shell configuration files for node user
 RUN echo 'export PATH=/home/node/.npm-global/bin:$PATH' >> /home/node/.bashrc && \
     echo 'export NPM_CONFIG_PREFIX=/home/node/.npm-global' >> /home/node/.bashrc && \
     echo 'export PYTHONPATH=/workspace:$PYTHONPATH' >> /home/node/.bashrc && \
     echo 'export PIP_USER=0' >> /home/node/.bashrc && \
-    chown node:node /home/node/.bashrc
-
-# Configure .zshrc for node user with Powerlevel10k theme
-RUN echo 'export ZSH="$HOME/.oh-my-zsh"' > /home/node/.zshrc \
-  && echo 'ZSH_THEME="powerlevel10k/powerlevel10k"' >> /home/node/.zshrc \
-  && echo 'plugins=(git ssh-agent zsh-autosuggestions zsh-syntax-highlighting)' >> /home/node/.zshrc \
-  && echo 'source $ZSH/oh-my-zsh.sh' >> /home/node/.zshrc \
-  && echo 'export PATH=/home/node/.npm-global/bin:$PATH' >> /home/node/.zshrc \
-  && echo 'export NPM_CONFIG_PREFIX=/home/node/.npm-global' >> /home/node/.zshrc \
-  && echo 'export PYTHONPATH=/workspace:$PYTHONPATH' >> /home/node/.zshrc \
-  && echo 'export PIP_USER=0' >> /home/node/.zshrc \
-  && echo '# Powerlevel10k instant prompt' >> /home/node/.zshrc \
-  && echo 'if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then' >> /home/node/.zshrc \
-  && echo '  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"' >> /home/node/.zshrc \
-  && echo 'fi' >> /home/node/.zshrc \
-  && echo '[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh' >> /home/node/.zshrc \
-  && chown node:node /home/node/.zshrc \
-  && chmod 644 /home/node/.zshrc
+    chown node:node /home/node/.bashrc && \
+    echo 'export ZSH="$HOME/.oh-my-zsh"' > /home/node/.zshrc && \
+    echo 'ZSH_THEME="powerlevel10k/powerlevel10k"' >> /home/node/.zshrc && \
+    echo 'plugins=(git ssh-agent zsh-autosuggestions zsh-syntax-highlighting)' >> /home/node/.zshrc && \
+    echo 'source $ZSH/oh-my-zsh.sh' >> /home/node/.zshrc && \
+    echo 'export PATH=/home/node/.npm-global/bin:$PATH' >> /home/node/.zshrc && \
+    echo 'export NPM_CONFIG_PREFIX=/home/node/.npm-global' >> /home/node/.zshrc && \
+    echo 'export PYTHONPATH=/workspace:$PYTHONPATH' >> /home/node/.zshrc && \
+    echo 'export PIP_USER=0' >> /home/node/.zshrc && \
+    echo '# Powerlevel10k instant prompt' >> /home/node/.zshrc && \
+    echo 'if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then' >> /home/node/.zshrc && \
+    echo '  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"' >> /home/node/.zshrc && \
+    echo 'fi' >> /home/node/.zshrc && \
+    echo '[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh' >> /home/node/.zshrc && \
+    chown node:node /home/node/.zshrc && \
+    chmod 644 /home/node/.zshrc
 
 # Set default shell to zsh for node user
 RUN chsh -s /usr/bin/zsh node
