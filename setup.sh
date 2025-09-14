@@ -132,22 +132,27 @@ setup_claude_auth() {
     # This prevents mount errors when starting DevContainer
     if [ ! -d "$HOME/.claude" ]; then
         mkdir -p "$HOME/.claude"
-        log_info "Created Claude directory: $HOME/.claude"
+        chmod 700 "$HOME/.claude"
+        log_info "Created Claude directory: $HOME/.claude (permissions: 700)"
     fi
 
     if [ ! -f "$HOME/.claude.json" ]; then
         # Create empty .claude.json to prevent mount errors
         echo '{}' > "$HOME/.claude.json"
-        log_info "Created placeholder .claude.json file"
+        chmod 600 "$HOME/.claude.json"
+        log_info "Created placeholder .claude.json file (permissions: 600)"
         log_warning "Claude authentication not configured yet."
         log_info "Run 'claude auth' after DevContainer starts to authenticate."
     else
         log_success "Claude configuration already exists at ~/.claude.json"
+        # Ensure proper permissions on existing file
+        chmod 600 "$HOME/.claude.json"
     fi
 
     # Create basic directories for Claude if they don't exist
     mkdir -p "$CLAUDE_CONFIG_DIR"
-    log_info "Created Claude configuration directory: $CLAUDE_CONFIG_DIR"
+    chmod 700 "$CLAUDE_CONFIG_DIR"
+    log_info "Created Claude configuration directory: $CLAUDE_CONFIG_DIR (permissions: 700)"
 }
 
 # VS Code launch instructions (user manual control)
