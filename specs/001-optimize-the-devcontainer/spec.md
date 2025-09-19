@@ -39,6 +39,8 @@ As a developer using the current working DevContainer setup across multiple proj
 
 8. **Given** a development project requiring MCP server integration, **When** developer runs the Serena MCP initialization script, **Then** the project should be configured with appropriate MCP server setup and connection templates
 
+9. **Given** a WSL2 development environment with Windows host filesystem access, **When** developer accesses /mnt/c or /mnt/d directories, **Then** Windows drives should be directly accessible for file operations and cross-platform development workflows
+
 ### Edge Cases
 - Container must build successfully if cache directories don't exist yet
 - Optimization rollback must be immediate if any functionality breaks
@@ -64,6 +66,7 @@ As a developer using the current working DevContainer setup across multiple proj
 - **FR-014**: System MUST include SpecKit project initialization script for convenient AI-assisted development workflow setup
 - **FR-015**: System MUST enable rapid WSL2 DevContainer environment creation through GitHub clone with minimal setup steps
 - **FR-016**: System MUST include Serena MCP initialization script for convenient MCP server management and configuration
+- **FR-017**: System MUST include Windows Host filesystem access through /mnt/c and /mnt/d mount points for seamless WSL2-Windows integration
 
 ### Performance Requirements
 - **PR-001**: Docker build time SHOULD improve by 10-20% through layer consolidation
@@ -87,6 +90,7 @@ As a developer using the current working DevContainer setup across multiple proj
 - **SpecKit Integration**: Project initialization script for setting up AI-assisted development workflows with proper directory structure and templates
 - **GitHub Distribution**: Configuration ready for cloning and immediate use on new WSL2 environments with minimal setup requirements
 - **Serena MCP Integration**: Initialization script for MCP server management and configuration setup in development projects
+- **Windows Host Integration**: Direct filesystem access to Windows drives (/mnt/c, /mnt/d) for seamless file sharing between WSL2 and Windows environments
 
 ---
 
