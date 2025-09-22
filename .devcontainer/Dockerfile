@@ -48,6 +48,7 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | d
     python3-setuptools \
     python3-wheel \
     build-essential \
+    python3-pypff \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Create symbolic link for python command
@@ -91,7 +92,11 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     rich \
     typer \
     click \
-    python-dotenv
+    python-dotenv \
+    beautifulsoup4 \
+    html2text \
+    striprtf \
+    tqdm
 
 # Install git-delta
 RUN DELTA_VERSION=${GIT_DELTA_VERSION} && \
