@@ -19,7 +19,7 @@ This project provides incremental optimization of existing working DevContainer 
 - **Base Image**: Node.js 20 on Debian Bullseye
 - **Shell**: Zsh with Powerlevel10k theme (complete .p10k.zsh configuration)
 - **Development Stack**: Python data science (40+ packages), Rust toolchain, modern CLI tools
-- **AI Integration**: Claude Code with proper API key mounting
+- **AI Integration**: Claude Code v1.0.37 (pinned version) with proper API key mounting
 - **Network**: iptables firewall with NET_ADMIN/NET_RAW capabilities
 
 ## Development Configuration (Testing)
@@ -531,10 +531,37 @@ specs/001-optimize-the-devcontainer/
 
 **Current Status**: Windows Host integration complete. DevContainer now provides seamless WSL2-Windows filesystem access while maintaining all performance optimizations and functionality.
 
+## Phase 8: Claude Code Best Practices Integration (2025-09-27)
+
+### ✅ Task 8.1: Pin Claude Code Version to 1.0.37 COMPLETE
+
+**Status**: ✅ COMPLETE - Version pinning implemented
+**Duration**: 20 minutes
+**Completion Date**: 2025-09-27
+**Implementation**: Following Qiita best practices article recommendations
+
+**Implementation Achievements**:
+
+1. **Version Stability**:
+   - Claude Code CLI locked to version 1.0.37 (recommended stable version)
+   - ARG CLAUDE_CODE_VERSION set in Dockerfile
+   - Prevents unexpected behavior from version updates
+
+2. **Documentation Updates**:
+   - task.md updated with Phase 8 integration
+   - CLAUDE.md updated to reflect version pinning
+   - Obsolete validation tasks removed for clarity
+
+**Benefits Achieved**:
+- **Stability**: Fixed version ensures consistent behavior
+- **Predictability**: No unexpected changes from auto-updates
+- **Best Practice**: Following community recommendations
+- **Documentation**: Clear version tracking and rationale
+
 ---
 
-_Updated: 2025-09-19 - Phase 7 COMPLETE + Windows Host Integration Added_
+_Updated: 2025-09-27 - Phase 8 Task 8.1 COMPLETE + Claude Code version pinning_
 _Status: 60% cumulative build time improvement maintained (351.3s → 139.7s)_
-_Achievement: Complete DevContainer optimization with Windows Host filesystem access and comprehensive documentation_
-_Current: Production-ready repository with seamless WSL2-Windows integration and optional automation available_
-_Latest: Windows Host filesystem access (/mnt/c, /mnt/d) successfully integrated with full documentation sync_
+_Achievement: Complete DevContainer optimization with Windows Host filesystem access and Claude Code best practices_
+_Current: Production-ready repository with v1.0.37 Claude Code, WSL2-Windows integration, and optional automation_
+_Latest: Claude Code version pinned to 1.0.37 following community best practices_
