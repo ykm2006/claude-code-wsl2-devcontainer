@@ -28,6 +28,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   wget \
   ca-certificates \
   aggregate \
+  shellcheck \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install fzf from source (more reliable than package)
@@ -186,7 +187,8 @@ RUN --mount=type=cache,target=/home/node/.cache/pip,uid=1000,gid=1000 \
     pip3 install --user \
     poetry \
     pipenv \
-    virtualenvwrapper
+    virtualenvwrapper \
+    pyright
 
 # GitHub SpecKit integration
 RUN mkdir -p /home/node/.local/bin
