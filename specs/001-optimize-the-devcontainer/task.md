@@ -594,15 +594,30 @@ This task list breaks down the DevContainer optimization implementation into spe
 
 **Actions**:
 - [✅] Update Dockerfile npm install command to specify version 1.0.37
-- [✅] Test container build with pinned version
+- [✅] Remove redundant ARG variables from devcontainer.json
+- [✅] Add environment variables to prevent VS Code extension auto-install
+- [✅] Test container build with pinned version (multiple iterations)
 - [✅] Verify Claude Code functionality with fixed version
 - [✅] Update documentation to reflect version pinning
+- [✅] Resolve dual installation issue (1.0.37 vs 1.0.127)
+
+**Implementation Details**:
+- **Issue Discovered**: VS Code extension automatically installed Claude Code CLI 1.0.127 to `/home/node/.npm-global`
+- **Root Cause**: VS Code extension `anthropic.claude-code` auto-installs CLI on startup
+- **Solution Applied**: 
+  - Added `CLAUDE_CODE_IDE_SKIP_AUTO_INSTALL=1` environment variable
+  - Added `DISABLE_AUTOUPDATER=1` environment variable
+  - Removed redundant ARG variables (CLAUDE_CODE_VERSION, GIT_DELTA_VERSION, ZSH_IN_DOCKER_VERSION)
+  - Relied on Dockerfile defaults for version control
 
 **Acceptance Criteria**:
 - [✅] Claude Code installed at exactly version 1.0.37
+- [✅] No duplicate Claude Code installations
+- [✅] VS Code extension functions properly without auto-installing CLI
 - [✅] All Claude Code features working correctly
 - [✅] Build process completes successfully
 - [✅] Documentation updated
+- [✅] Environment variables properly configured
 
 ## Emergency Procedures
 
