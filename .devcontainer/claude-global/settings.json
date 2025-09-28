@@ -8,12 +8,6 @@
         "@upstash/context7-mcp"
       ],
       "env": {}
-    },
-    "markitdown": {
-      "type": "stdio",
-      "command": "markitdown-mcp",
-      "args": [],
-      "env": {}
     }
   }
 }
