@@ -79,7 +79,10 @@
       "Bash(uvx:*)",
       "Bash(rustc --version)",
       "Bash(cargo --version)",
-      "Bash(git log:*)"
+      "Bash(git log:*)",
+      "Bash(pip3 install:*)",
+      "Bash(sudo pip3 install:*)",
+      "Read(//tmp/**)"
     ],
     "deny": [],
     "ask": []
