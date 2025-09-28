@@ -392,19 +392,88 @@
 - [🌺] Context7 MCP統合 (30分)
   - [🌺] `claude mcp add context7` 実行
   - [🌺] 動作確認・最新ドキュメント取得テスト
-- [ ] Readability MCP統合 (30分)
-  - [ ] Mozilla Readability Parser MCP設定
-  - [ ] HTML→Markdown変換テスト
-- [ ] Serena MCP設定最適化 (30分)
-  - [ ] .serena/project.yml 言語・パス調整
-  - [ ] DevContainer環境での動作確認
+- [🌺] Readability MCP統合 (30分)
+  - [🌺] Mozilla Readability Parser MCP設定
+  - [🌺] HTML→Markdown変換テスト
+- [🌺] Serena MCP設定最適化 (30分)
+  - [🌺] .serena/project.yml 言語・パス調整
+  - [🌺] DevContainer環境での動作確認
 
-**🌟 Context7 MCP 完了メモ** (2025-09-28):
-- ✅ DevContainer グローバル設定統合完了
-- ✅ `.devcontainer/claude-global/settings.json` テンプレート作成
-- ✅ `postCreateCommand` で自動配置設定（CLAUDE.md + settings.json + npm-global）
-- ✅ npm ディレクトリ永続化問題解決
-- ✅ Context7 MCP 動作確認：Next.js 15 Turbopack 最新情報取得成功
+**🌟 Element 4 Phase1 完了メモ** (2025-09-28):
+- ✅ **Context7 MCP統合**: DevContainer グローバル設定統合完了
+- ✅ **Readability MCP統合**: `@just-every/mcp-read-website-fast` で成功
+  - 注意点: `server-moz-readability` は実行可能ファイル未設定で失敗
+  - 解決策: `@just-every/mcp-read-website-fast` パッケージが正常動作
+- ✅ **Serena MCP設定最適化**: TypeScript言語設定に変更
+  - 知見: 複数言語併記は現在未対応（Issue #72で将来対応予定）
+  - JSON/TypeScript系ファイル多数のため TypeScript設定が最適
+- ✅ 全MCP（Serena + Context7 + Readability）正常動作確認完了
+
+#### 📝 タスク 2.2.2.1: 統合プロジェクト設定スクリプト (setup-project.sh) 作成 🌱
+**期間**: 95分
+**依存関係**: Element 4 Phase1完了
+**担当者**: 開発チーム
+
+**目的**: Serena MCP + SpecKit の統合プロジェクト設定を自動化するスクリプトを作成し、言語設定可能な汎用プロジェクト初期化ツールを提供
+
+**実行項目**:
+- [ ] 既存スクリプト整理 (5分)
+  - [ ] init-serena-mcp.sh の削除・破棄
+  - [ ] init-speckit.sh の削除・破棄
+  - [ ] 既存の分散した初期化スクリプトの統合準備
+- [ ] 要件分析・設計 (15分)
+  - [ ] Serena MCP設定要件の整理（.mcp.json設定）
+  - [ ] SpecKit設定要件の整理（.specify/, specs/等）
+  - [ ] 言語設定対応の仕様設計
+  - [ ] コマンドライン引数設計（--language, --project-name等）
+- [ ] テンプレート作成 (25分)
+  - [ ] .mcp.json テンプレート作成（Serena + 他MCP統合）
+  - [ ] .serena/project.yml テンプレート作成（言語設定対応）
+  - [ ] SpecKit用ディレクトリ構造テンプレート
+  - [ ] 変数置換システム設計
+- [ ] スクリプト実装 (35分)
+  - [ ] scripts/setup-project.sh メインスクリプト作成
+  - [ ] 引数パース機能（--language, --project-name, --help）
+  - [ ] テンプレート展開・ファイル配置機能
+  - [ ] .mcp.json設定生成機能（Serena MCP設定）
+  - [ ] .serena/project.yml設定生成機能
+  - [ ] SpecKit初期化機能（.specify/等ディレクトリ作成）
+- [ ] エラーハンドリング・検証 (10分)
+  - [ ] 入力検証（サポート言語チェック等）
+  - [ ] ファイル存在チェック・上書き確認
+  - [ ] エラーメッセージ・ヘルプ表示
+- [ ] テスト・ドキュメント (5分)
+  - [ ] スクリプト動作確認
+  - [ ] 使用方法ドキュメント作成
+
+**受け入れ基準**:
+- [ ] 言語設定可能なプロジェクト初期化スクリプト完成
+- [ ] Serena MCP設定（.mcp.json）の自動生成
+- [ ] SpecKit設定の自動初期化
+- [ ] コマンドライン引数による柔軟な設定
+- [ ] エラーハンドリング・ユーザビリティ確保
+- [ ] 動作確認・テスト完了
+
+**サポート言語**:
+- typescript, python, rust, java, go, cpp, ruby, bash
+
+**使用例**:
+```bash
+# TypeScriptプロジェクトの初期化
+./scripts/setup-project.sh --language typescript --project-name my-project
+
+# Pythonプロジェクトの初期化
+./scripts/setup-project.sh --language python --project-name data-analysis
+
+# ヘルプ表示
+./scripts/setup-project.sh --help
+```
+
+**期待成果**:
+- プロジェクト作成時の手動設定作業の大幅削減
+- Serena MCP + SpecKit の統合環境の自動構築
+- 言語別最適化されたプロジェクト設定
+- 再現性の高いプロジェクト初期化プロセス
 
 #### 📝 タスク 2.2.3: Element 14 実装 🌱
 **期間**: 50分
@@ -517,3 +586,117 @@
 - [ ] ドキュメント完全性チェック
 
 **プロジェクト完了予定**: Phase 2 実装完了後
+
+---
+
+## 🚀 追加タスク: Debian Bookworm移行計画
+
+### 背景・動機
+- **Debian Bullseye**: LTSサポート（2026年8月31日終了）
+- **セキュリティリスク**: 通常サポート既に終了（2024年8月14日）
+- **技術的メリット**: Python 3.11標準でMarkItDown MCP対応
+- **将来性**: 長期サポート継続（Bookworm: 〜2028年）
+
+### 📋 Phase B1: 移行準備・リスク評価
+
+#### 📝 Task B1.1: 現状バックアップ・git記録 🌱
+**期間**: 10分
+**依存関係**: なし
+**実行項目**:
+- [ ] 現在のDockerfileをバックアップ保存
+- [ ] git commitで現在の安定状態を記録
+- [ ] ロールバック手順の確認・文書化
+
+#### 📝 Task B1.2: 依存関係・互換性分析 🌱  
+**期間**: 20分
+**依存関係**: Task B1.1
+**実行項目**:
+- [ ] 40+PythonパッケージのBookworm互換性確認
+- [ ] システムライブラリ依存関係の分析
+- [ ] 既存最適化（BuildKitキャッシュ）への影響評価
+- [ ] 潜在的問題点リストアップ
+
+### 📋 Phase B2: 段階的移行実行
+
+#### 📝 Task B2.1: ベースイメージ変更・最小構成テスト 🌱
+**期間**: 30分  
+**依存関係**: Task B1.2
+**実行項目**:
+- [ ] `FROM node:20-bullseye` → `FROM node:20-bookworm` 変更
+- [ ] 最小構成でのDevContainerビルドテスト
+- [ ] Python 3.11動作確認（`python3 --version`）
+- [ ] Node.js 20動作確認
+- [ ] 基本システムパッケージ確認
+
+#### 📝 Task B2.2: Pythonパッケージ互換性確認 🌱
+**期間**: 20分
+**依存関係**: Task B2.1  
+**実行項目**:
+- [ ] numpy, pandas等科学計算ライブラリのインストール確認
+- [ ] Django, FastAPI等Webフレームワーク確認
+- [ ] 開発ツール（black, flake8, pytest等）動作確認
+- [ ] パッケージバージョン競合解決
+
+#### 📝 Task B2.3: 既存機能・最適化検証 🌱
+**期間**: 30分
+**依存関係**: Task B2.2
+**実行項目**:
+- [ ] Zsh + Powerlevel10k環境確認
+- [ ] GitHub CLI + 認証確認  
+- [ ] uvx/uv (Rust toolchain) 動作確認
+- [ ] BuildKitキャッシュマウント最適化確認
+- [ ] ビルド時間測定・比較
+
+### 📋 Phase B3: MCP統合・最終検証
+
+#### 📝 Task B3.1: MarkItDown MCP統合確認 🌱
+**期間**: 30分
+**依存関係**: Task B2.3
+**実行項目**:
+- [ ] Python 3.11環境でのmarkitdown-mcpインストール
+- [ ] グローバル設定でのMCP接続確認
+- [ ] HTML→Markdown変換動作テスト
+- [ ] Context7, Serena MCPとの併用確認
+
+#### 📝 Task B3.2: 全体統合テスト・性能検証 🌱
+**期間**: 20分
+**依存関係**: Task B3.1
+**実行項目**:  
+- [ ] Element 4 Phase1完了確認（MarkItDown MCP グローバル設定）
+- [ ] 既存MCP（Context7, Serena）動作確認
+- [ ] DevContainer起動・再起動テスト
+- [ ] ビルド時間最適化効果確認
+- [ ] 安定性確認（複数回テスト）
+
+### 📋 Phase B4: 完了・文書化
+
+#### 📝 Task B4.1: 移行完了・ドキュメント更新 🌱
+**期間**: 15分
+**依存関係**: Task B3.2
+**実行項目**:
+- [ ] CLAUDE.md プロジェクト情報更新
+- [ ] DevContainer構成変更の記録
+- [ ] 新しいPython 3.11環境の利用ガイド作成
+- [ ] 移行の成果・改善点まとめ
+
+#### 📝 Task B4.2: Element 4 Phase1完了宣言 🌱  
+**期間**: 5分
+**依存関係**: Task B4.1
+**実行項目**:
+- [ ] MarkItDown MCP グローバル設定完了確認
+- [ ] task.md進捗更新（Element 4 Phase1 → 🌺）
+- [ ] 次フェーズ準備（Element 15, Element 8実装）
+
+### 🎯 移行成功基準
+- ✅ **DevContainer正常起動**: Bookworm環境での安定動作
+- ✅ **Python 3.11環境**: システム標準Python更新完了
+- ✅ **MarkItDown MCP**: グローバル設定での正常動作
+- ✅ **既存機能保持**: 全MCP + 開発環境機能継続
+- ✅ **性能維持**: 60%ビルド時間改善効果保持
+- ✅ **セキュリティ向上**: 長期サポート環境への移行完了
+
+### ⚠️ リスク軽減策
+- **ロールバック計画**: gitベースの即座復元可能
+- **段階的検証**: 各ステップでの動作確認
+- **バックアップ保持**: 安定動作版Dockerfileの保管
+- **最小変更原則**: ベースイメージのみ変更、追加修正最小限

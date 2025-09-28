@@ -464,7 +464,43 @@ ln -s ./003-claude-code-wsl2-devcontainer/.devcontainer /workspace/.devcontainer
 
 ---
 
-_Updated: 2025-09-28 Late Morning Session - Context7 MCP Implementation Complete ✅_
-_Achievement: DevContainerグローバルMCP統合完成、Context7動作確認成功_
-_Status: Element 4 Phase1 33%完了 → git commit → Readability MCP統合継続_
-_Next Session: Element 4 Phase1完了 → Phase2 MCP拡張統合_
+### 2025-09-28 Afternoon Session - Element 4 Roadblock & Debian Bookworm Migration Plan ⚠️
+
+**Session Challenge**:
+- 🚫 **MarkItDown MCP Python互換性問題**: Readability MCP統合で予期しない環境問題発生
+  - 要求Python 3.10+ vs 現在環境Python 3.9.2 (Debian Bullseye制約)
+  - プロジェクトローカルでは動作、グローバル設定では失敗
+  - Python 3.10直接インストール試行 → DevContainer起動失敗、緊急復旧実施
+- 🔍 **根本原因特定**: Debian Bullseye (2021年) のPython 3.9固定制約
+  - サポート終了: 2026年8月31日（あと10か月）
+  - 現代MCP要件に対応不可
+- 📋 **戦略的解決策**: Debian Bookworm (Python 3.11) 移行計画立案
+
+**Migration Plan Created**:
+- **Phase B1**: 現状分析・バックアップ作成（1時間）
+- **Phase B2**: 段階的移行・機能検証（1時間）
+- **Phase B3**: MCP統合完成・最適化（30分）
+- **Phase B4**: 統合テスト・ドキュメント完成（15分）
+- **合計所要時間**: 2時間45分の慎重実装
+
+**Technical Implications**:
+- **一時中断**: Element 4 Phase1 Readability MCP統合（Python要件により）
+- **基盤強化**: Bookworm移行で最新Python 3.11 + 現代MCP完全対応
+- **リスク軽減**: 60%最適化保持 + 全機能継承の保証戦略
+
+**Status Update**:
+- **Element 3**: Global Configuration 完全実装完了 ✅
+- **Element 4**: Context7 MCP統合完了、Readability MCP 一時保留（Bookworm移行待ち）
+- **Immediate Priority**: Debian Bookworm移行実行 → Element 4 完全実装継続
+
+**Current Environment Status**:
+- **復旧成功**: DevContainer起動機能正常
+- **MCP動作確認**: Serena ✓ + Context7 ✓ 両方正常動作維持
+- **移行準備**: task.md にBookworm移行計画反映完了
+
+---
+
+_Updated: 2025-09-28 Afternoon Session - Debian Bookworm Migration Plan Created ⚠️_
+_Achievement: Python互換性問題根本解決策策定、DevContainer緊急復旧成功_
+_Status: Element 4一時中断 → Bookworm移行準備完了 → 現代MCP統合基盤確立予定_
+_Next Session: Phase B1.1 開始 - 現状バックアップ・git記録 (Bookworm移行実行)_
