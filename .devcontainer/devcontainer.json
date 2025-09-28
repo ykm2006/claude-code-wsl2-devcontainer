@@ -59,7 +59,7 @@
   },
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=delegated",
   "workspaceFolder": "/workspace",
-  "postCreateCommand": "mkdir -p ~/.claude && cp .devcontainer/claude-global/CLAUDE.md ~/.claude/",
+  "postCreateCommand": "mkdir -p ~/.claude && cp .devcontainer/claude-global/CLAUDE.md ~/.claude/ && cp .devcontainer/claude-global/settings.json ~/.claude/ && mkdir -p ~/.npm-global/lib",
   "postStartCommand": "sudo /usr/local/bin/init-firewall.sh",
   "waitFor": "postStartCommand"
 }
