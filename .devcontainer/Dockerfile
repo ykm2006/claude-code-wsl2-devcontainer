@@ -1,9 +1,9 @@
 # syntax=docker/dockerfile:1
-FROM node:20-bullseye
+FROM node:20-bookworm
 
 ARG TZ
 ENV TZ="$TZ"
-ARG CLAUDE_CODE_VERSION=1.0.37
+ARG CLAUDE_CODE_VERSION=latest
 ARG GIT_DELTA_VERSION=0.18.2
 ARG ZSH_IN_DOCKER_VERSION=1.2.0
 
@@ -55,13 +55,13 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | d
 # Create symbolic link for python command
 RUN ln -s /usr/bin/python3 /usr/local/bin/python
 
-# Upgrade pip and install basic Python packages
+# Upgrade pip and install basic Python packages (PEP 668 override for Docker)
 RUN --mount=type=cache,target=/root/.cache/pip \
-    python3 -m pip install --upgrade pip setuptools wheel
+    python3 -m pip install --upgrade pip setuptools wheel --break-system-packages
 
-# Install commonly used Python packages
+# Install commonly used Python packages (PEP 668 override for Docker)
 RUN --mount=type=cache,target=/root/.cache/pip \
-    pip3 install \
+    pip3 install --break-system-packages \
     requests \
     numpy \
     pandas \
@@ -182,9 +182,9 @@ WORKDIR /home/node
 # Create SSH directory for Oh My Zsh ssh-agent plugin
 RUN mkdir -p /home/node/.ssh && chmod 700 /home/node/.ssh
 
-# Install some user-level Python packages
+# Install some user-level Python packages (PEP 668 override for Docker)
 RUN --mount=type=cache,target=/home/node/.cache/pip,uid=1000,gid=1000 \
-    pip3 install --user \
+    pip3 install --user --break-system-packages \
     poetry \
     pipenv \
     virtualenvwrapper \
