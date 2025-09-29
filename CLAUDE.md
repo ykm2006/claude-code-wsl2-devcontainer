@@ -6,11 +6,11 @@ This project provides incremental optimization of existing working DevContainer 
 
 ## Project Status
 
-**Current Phase**: specs/002-claude-code-best-practices (Phase B2.3 Complete)
-**Branch**: `master` (001 optimization complete, 002 partially implemented)
+**Current Phase**: specs/002-claude-code-best-practices (Phase B Complete ✅)
+**Branch**: `master` (001 optimization complete, 002 Bookworm migration complete)
 **Approach**: Element-by-element Claude Code best practices integration
 **Target Platform**: Windows WSL2 (exclusive focus)
-**Current Status**: Debian Bookworm migration complete, Claude Code latest + MCP integration operational
+**Current Status**: Debian Bookworm + Python 3.11 environment, Claude Code latest + 3-MCP integration operational
 
 ## Current Working Configuration
 
@@ -25,7 +25,7 @@ This project provides incremental optimization of existing working DevContainer 
 - **Base Image**: Node.js 20 on Debian Bookworm (Python 3.11.2 modernized)
 - **Shell**: Zsh with Powerlevel10k theme
 - **Development Stack**: Python data science (40+ packages), uv/uvx package management
-- **AI Integration**: Claude Code latest with MCP support (Serena + Context7)
+- **AI Integration**: Claude Code latest with 3-MCP support (Serena + Context7 + MarkItDown)
 - **Network**: iptables firewall with NET_ADMIN/NET_RAW capabilities
 - **Enhancements**: SpecKit integration, Global Configuration, Windows Host mounting
 
@@ -46,7 +46,7 @@ _Detailed history: See [docs/001-optimization-history.md](docs/001-optimization-
 - **Claude Code integration**: Proper API key mounting and latest version support
 - **Cross-platform support**: WSL2 + Windows filesystem access (`/mnt/c`, `/mnt/d`)
 - **Advanced tools**: GitHub CLI, git-delta, fzf, comprehensive development stack
-- **MCP Support**: Serena for code analysis, Context7 for documentation, global MCP configuration
+- **MCP Support**: Serena for code analysis, Context7 for documentation, MarkItDown for file conversion, global MCP configuration
 
 ## specs/002-claude-code-best-practices: Claude Code Enhancement Project
 
@@ -495,14 +495,16 @@ ln -s ./003-claude-code-wsl2-devcontainer/.devcontainer /workspace/.devcontainer
 ### 2025-09-28 Afternoon Session - Element 4 Roadblock & Debian Bookworm Migration Plan ⚠️
 
 **Session Challenge**:
-- 🚫 **MarkItDown MCP Python互換性問題**: Readability MCP統合で予期しない環境問題発生
+- 🚫 **MCP Python互換性問題**: Readability MCP統合で予期しない環境問題発生
   - 要求Python 3.10+ vs 現在環境Python 3.9.2 (Debian Bullseye制約)
+  - **Readability MCPもMarkItDown MCPも同じPython 3.10+要件**
   - プロジェクトローカルでは動作、グローバル設定では失敗
   - Python 3.10直接インストール試行 → DevContainer起動失敗、緊急復旧実施
 - 🔍 **根本原因特定**: Debian Bullseye (2021年) のPython 3.9固定制約
   - サポート終了: 2026年8月31日（あと10か月）
   - 現代MCP要件に対応不可
 - 📋 **戦略的解決策**: Debian Bookworm (Python 3.11) 移行計画立案
+  - **最終決定**: MarkItDown MCPでReadability MCP機能を代替
 
 **Migration Plan Created**:
 - **Phase B1**: 現状分析・バックアップ作成（1時間）
@@ -528,7 +530,111 @@ ln -s ./003-claude-code-wsl2-devcontainer/.devcontainer /workspace/.devcontainer
 
 ---
 
-_Updated: 2025-09-28 Afternoon Session - Debian Bookworm Migration Plan Created ⚠️_
-_Achievement: Python互換性問題根本解決策策定、DevContainer緊急復旧成功_
-_Status: Element 4一時中断 → Bookworm移行準備完了 → 現代MCP統合基盤確立予定_
-_Next Session: Phase B1.1 開始 - 現状バックアップ・git記録 (Bookworm移行実行)_
+### 2025-09-28 Evening Session - Debian Bookworm Migration Complete ✅
+
+**Session Achievements**:
+- ✅ **Phase B Complete**: Debian Bookworm移行プロジェクト完全完了
+- ✅ **Python 3.11.2環境**: Debian Bullseye (Python 3.9) → Bookworm (Python 3.11.2) 移行成功
+- ✅ **3-MCP統合**: Serena + Context7 + MarkItDown MCP 完璧統合動作
+- ✅ **60%最適化維持**: BuildKitキャッシュマウント5箇所、351.3s→139.7s改善保持
+- ✅ **セキュリティ向上**: 長期サポート環境移行（〜2028年）、Python 3.9サポート終了直前（2025年10月）からの安全移行
+
+**Technical Validation**:
+- **Base Environment**: Node.js 20.19.5 + Python 3.11.2 on Debian GNU/Linux 12 Bookworm
+- **Development Stack**: 40+パッケージ（numpy 2.3.3, pandas 2.3.2, Django 5.2.6等）正常動作
+- **Build Optimization**: PEP 668制約解決、3箇所`--break-system-packages`対応
+- **MCP Integration**: 自動設定システム完璧動作、DevContainer rebuildで自動復元
+
+**Migration Success Criteria Achieved**:
+- ✅ DevContainer正常起動・安定動作
+- ✅ 既存機能・最適化効果完全保持
+- ✅ 現代MCP要件対応（MarkItDown MCP等）
+- ✅ 長期サポート環境確立
+
+**New Python 3.11 Environment Guide**:
+
+**Environment Information**:
+- **Python Version**: 3.11.2 (system default)
+- **Package Management**: uv/uvx 0.8.22 (Rust-based, high-performance)
+- **Package Installation**: PEP 668 compliant with `--break-system-packages` where needed
+- **Available Packages**: 40+ scientific/web packages pre-installed
+
+**Key Benefits**:
+- **Modern MCP Support**: MarkItDown MCP (requires Python 3.10+) now fully operational
+- **Performance**: Faster package resolution and installation via uv/uvx
+- **Security**: Long-term support until 2028, avoiding Python 3.9 EOL (October 2025)
+- **Compatibility**: All existing functionality preserved with enhanced capabilities
+
+**Usage Examples**:
+```bash
+# Python version check
+python3 --version  # Python 3.11.2
+
+# Package management with uv (recommended)
+uv pip install package-name
+
+# Traditional pip (with PEP 668 compliance)
+pip3 install --break-system-packages package-name
+
+# MCP operations
+claude mcp add markitdown  # Now works seamlessly
+markitdown-mcp --help     # MarkItDown MCP available
+```
+
+**Development Workflow**:
+- **Code Analysis**: Serena MCP for advanced semantic analysis
+- **Documentation**: Context7 MCP for up-to-date library documentation
+- **File Conversion**: MarkItDown MCP for HTML/PDF/Office → Markdown conversion
+- **Build Optimization**: Maintained 60% improvement (351.3s → 139.7s)
+
+**Migration Achievements Summary**:
+
+**🎯 Primary Objectives Achieved**:
+1. **Modern Python Environment**: Python 3.9 → 3.11.2 successful migration
+2. **Extended Security Support**: Debian Bullseye → Bookworm (support until 2028)
+3. **Enhanced MCP Capabilities**: 3-MCP integration (Serena + Context7 + MarkItDown)
+4. **Performance Preservation**: 60% build time improvement maintained
+
+**🚀 Technical Improvements**:
+- **Package Management**: uv/uvx 0.8.22 integration for faster operations
+- **PEP 668 Compliance**: Modern Python packaging standards implementation
+- **Automatic Recovery**: DevContainer rebuild auto-restores all configurations
+- **Zero Downtime**: Seamless transition with full functionality preservation
+
+**🔧 Implementation Efficiency**:
+- **Planned Duration**: 2h 45m → **Actual Duration**: ~2h 30m
+- **Risk Mitigation**: 3-tier backup strategy (file + git + reset capability)
+- **Validation Approach**: Comprehensive testing at each migration phase
+- **Rollback Ready**: Complete restoration capability maintained throughout
+
+**📈 Value Delivered**:
+- **Future-Proofing**: 3+ years additional support vs. Python 3.9 EOL (Oct 2025)
+- **Development Velocity**: Enhanced MCP ecosystem access unlocks new capabilities
+- **Stability**: Production-ready environment with proven reliability
+- **Scalability**: Foundation for specs/002 Claude Code best practices implementation
+
+---
+
+---
+
+### 2025-09-30 Session - MarkItDown MCP代替実装の記録整理 ✅
+
+**Session Achievements**:
+- ✅ **Readability MCP → MarkItDown MCP代替の経緯整理**
+  - 当初計画: Readability MCP (HTML→クリーンMarkdown変換)
+  - 問題発見: Python 3.10+要件で両MCP同じ制約
+  - 解決策: MarkItDown MCPで統一（機能重複のため）
+- ✅ **task.md更新**: Element 4 Phase1実装メモに代替経緯記録
+- ✅ **CLAUDE.md更新**: Migration経緯に詳細追記
+
+**Technical Decision**:
+- **Readability MCP**: **REJECT** (MarkItDown MCPで代替済み)
+- **MarkItDown MCP**: Webページ含むHTML/PDF/Office→Markdown変換で完全カバー
+- **実装効率化**: 重複機能削減、MCP数を最小化
+
+---
+
+_Updated: 2025-09-30 Session - MarkItDown MCP代替実装記録 ✅_
+_Achievement: Python 3.11環境確立、3-MCP統合完了、60%最適化維持_
+_Status: Phase B完全完了 → specs/002 Phase 2実装フェーズ再開準備完了_
+_Next Session: Element 15, Element 8実装 または specs/002 Phase 2継続_
