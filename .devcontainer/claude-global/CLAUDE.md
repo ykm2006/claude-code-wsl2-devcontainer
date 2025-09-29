@@ -96,9 +96,10 @@ When receiving development tasks, please follow the structured workflow below. T
 ## Integration Guidelines
 
 ### MCP Enhancement
+- **MCP設定はプロジェクトごと**: 各プロジェクトの`.mcp.json`で個別管理
 - **Context7**: Leverage for codebase analysis and library documentation
 - **Serena**: Use for advanced code analysis and optimization suggestions
-- **Readability**: Apply for code readability improvements
+- **MarkItDown**: Convert HTML/PDF/Office to Markdown format
 - **Textlint**: Utilize for Japanese document quality improvement
 
 ### Tool Selection
