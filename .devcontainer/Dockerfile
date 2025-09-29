@@ -97,6 +97,8 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     beautifulsoup4 \
     html2text \
     striprtf \
+    markitdown \
+    markitdown-mcp \
     tqdm
 
 # Install git-delta
