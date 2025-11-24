@@ -63,7 +63,9 @@ VSCode が devcontainer.json（正しい symlink 先）を読み込む
 
 ### Step 1: PATH 環境変数の設定
 
-`~/.zshrc` または `~/.bashrc` に以下の行を追加してください：
+**ホスト側**（KDE Neon または WSL2）の `~/.bashrc` に以下の行を追加してください：
+
+⚠️ **重要**: `~/.zshrc` ではなく **`~/.bashrc`** に追加してください。このスクリプトはホスト側で動作するため、DevContainer 内のシェル設定ではなく、ホスト側のシェル設定が必要です。
 
 ```bash
 # DevContainer クロスプラットフォーム対応
@@ -72,8 +74,8 @@ export PATH="/workspace/scripts:$PATH"
 
 **編集コマンド例**:
 ```bash
-echo 'export PATH="/workspace/scripts:$PATH"' >> ~/.zshrc
-source ~/.zshrc
+echo 'export PATH="/workspace/scripts:$PATH"' >> ~/.bashrc
+source ~/.bashrc
 ```
 
 ### Step 2: 初回確認
@@ -140,6 +142,7 @@ SyncThing で `/workspace/.devcontainer/devcontainer.json` が同期される場
 
 1. **symlink は同期されない**（`.gitignore` で除外）
 2. **各マシンで `code .` を実行するだけで自動設定される**
+   - ただし、初回は `~/.bashrc` に PATH を設定しておく必要があります
 3. マニュアル調整は **不要**
 
 ## トラブルシューティング
@@ -150,11 +153,12 @@ SyncThing で `/workspace/.devcontainer/devcontainer.json` が同期される場
 
 **解決方法**:
 ```bash
-# ~/.zshrc / ~/.bashrc に追加されているか確認
-grep "export PATH.*workspace/scripts" ~/.zshrc
+# ~/.bashrc に追加されているか確認
+grep "export PATH.*workspace/scripts" ~/.bashrc
 
 # 設定後、ターミナルをリロード
-exec $SHELL
+source ~/.bashrc
+# または新しいターミナルウィンドウを開く
 ```
 
 ### 問題: setup-devcontainer-symlink.sh がエラーを出す
@@ -202,9 +206,9 @@ ls -la /workspace/.devcontainer/devcontainer.json
 新しいマシンに SyncThing で同期後：
 
 ```bash
-# 1. PATH を ~/.zshrc に追加
-echo 'export PATH="/workspace/scripts:$PATH"' >> ~/.zshrc
-source ~/.zshrc
+# 1. PATH を ~/.bashrc に追加
+echo 'export PATH="/workspace/scripts:$PATH"' >> ~/.bashrc
+source ~/.bashrc
 
 # 2. code . を実行（自動セットアップ）
 cd /workspace
