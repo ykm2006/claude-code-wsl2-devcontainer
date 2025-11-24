@@ -1,6 +1,9 @@
 # Claude Code local settings
 .claude/settings.local.json
 
+# DevContainer symlink (environment-specific, not version-controlled)
+.devcontainer/devcontainer.json
+
 # Temporary files
 .tmp/
 
