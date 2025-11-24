@@ -14,6 +14,21 @@
         "/workspace/003-claude-code-wsl2-devcontainer"
       ],
       "env": {}
+    },
+    "context7": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp"
+      ],
+      "env": {}
+    },
+    "markitdown": {
+      "type": "stdio",
+      "command": "markitdown-mcp",
+      "args": [],
+      "env": {}
     }
   }
 }

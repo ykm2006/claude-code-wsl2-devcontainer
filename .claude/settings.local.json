@@ -82,13 +82,28 @@
       "Bash(git log:*)",
       "Bash(pip3 install:*)",
       "Bash(sudo pip3 install:*)",
-      "Read(//tmp/**)"
+      "Read(//tmp/**)",
+      "Bash(git checkout:*)",
+      "Read(//usr/lib/**)",
+      "Bash(if [ -d \"/workspace/.devcontainer/mcp-markdown-rag-multilingual\" ])",
+      "Bash(then cd /workspace/.devcontainer/mcp-markdown-rag-multilingual)",
+      "Bash(else echo \"Repository not found\")",
+      "Bash(fi)",
+      "Read(//opt/mcp-servers/**)",
+      "Bash(if [ -d \"/opt/mcp-servers/markdown-rag\" ])",
+      "Bash(then cd /opt/mcp-servers/markdown-rag)",
+      "mcp__serena__activate_project",
+      "Bash(git restore:*)",
+      "Bash(git reset:*)",
+      "mcp__serena__write_memory"
     ],
     "deny": [],
     "ask": []
   },
   "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
-    "serena"
+    "serena",
+    "context7",
+    "markitdown"
   ]
 }
