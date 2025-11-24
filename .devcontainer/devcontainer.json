@@ -1,5 +1,7 @@
 {
   "name": "Claude Code Sandbox modified.",
+  "mountWorkspaceGitRoot": false,
+  "overrideCommand": false,
   "build": {
     "dockerfile": "Dockerfile",
     "options": [
@@ -9,7 +11,12 @@
       "TZ": "${localEnv:TZ:Asia/Tokyo}"
     }
   },
-  "runArgs": ["--cap-add=NET_ADMIN", "--cap-add=NET_RAW"],
+  "runArgs": [
+    "--cap-add=NET_ADMIN",
+    "--cap-add=NET_RAW",
+    "--gpus=all",
+    "--network=host"
+  ],
   "customizations": {
     "vscode": {
       "extensions": [
@@ -46,9 +53,7 @@
   "mounts": [
     "source=claude-code-bashhistory-${devcontainerId},target=/commandhistory,type=volume",
     "source=${localEnv:HOME}/.claude,target=/home/node/.claude,type=bind,consistency=cached",
-    "source=${localEnv:HOME}/.claude.json,target=/home/node/.claude.json,type=bind,consistency=cached",
-    "source=/mnt/c,target=/mnt/c,type=bind,consistency=cached",
-    "source=/mnt/d,target=/mnt/d,type=bind,consistency=cached"
+    "source=${localEnv:HOME}/.claude.json,target=/home/node/.claude.json,type=bind,consistency=cached"
   ],
   "containerEnv": {
     "NODE_OPTIONS": "--max-old-space-size=4096",

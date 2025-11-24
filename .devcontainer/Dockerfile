@@ -1,4 +1,3 @@
-# syntax=docker/dockerfile:1
 FROM node:20-bookworm
 
 ARG TZ
@@ -57,7 +56,7 @@ RUN ln -s /usr/bin/python3 /usr/local/bin/python
 
 # Upgrade pip and install basic Python packages (PEP 668 override for Docker)
 RUN --mount=type=cache,target=/root/.cache/pip \
-    python3 -m pip install --upgrade pip setuptools wheel --break-system-packages
+ python3 -m pip install --upgrade pip setuptools wheel --break-system-packages
 
 # Install commonly used Python packages (PEP 668 override for Docker)
 RUN --mount=type=cache,target=/root/.cache/pip \
@@ -138,6 +137,8 @@ RUN mkdir -p /home/node/.local/bin && \
     mv /root/.local/bin/uvx /home/node/.local/bin/uvx && \
     chown -R node:node /home/node/.local && \
     chmod 755 /home/node/.local/bin/uv /home/node/.local/bin/uvx
+# ★ Make uv visible during build layers
+ENV PATH="/home/node/.local/bin:${PATH}"
 
 # Setup firewall script and copy p10k config
 COPY init-firewall.sh /usr/local/bin/init-firewall.sh
@@ -199,5 +200,51 @@ COPY --chown=node:node --chmod=755 init-speckit.sh /home/node/.local/bin/init-sp
 # Serena MCP integration
 COPY --chown=node:node --chmod=755 init-serena-mcp.sh /home/node/.local/bin/init-serena-mcp
 
+USER root
+RUN mkdir -p /opt/mcp-servers \
+  && chown -R node:node /opt/mcp-servers
+
+USER node
+
+# === MCP-Markdown-RAG Setup (Task 23, 25, 25.5) ===
+# Clone repository
+RUN git clone https://github.com/Zackriya-Solutions/MCP-Markdown-RAG.git /opt/mcp-servers/markdown-rag
+
+# Python 3.11 を uv で導入し、固定パスに venv を作成
+RUN uv python install 3.11
+ENV VENV_DIR=/opt/mcp-servers/markdown-rag/.venv
+RUN uv venv "${VENV_DIR}" --python 3.11
+
+# （任意）明示メタ：ツールが .python-version を見る場合用
+RUN echo "3.11" > /opt/mcp-servers/markdown-rag/.python-version
+
+# 依存インストール：
+# - pyproject.toml があれば uv sync（静音失敗→続行）
+# - なければ venv の Python を指定して必要パッケージを直接インストール
+WORKDIR /opt/mcp-servers/markdown-rag
+RUN (test -f pyproject.toml && uv sync --frozen --no-install-project -q) || true \
+ && uv pip install --python "${VENV_DIR}/bin/python" -U pip \
+ && uv pip install --python "${VENV_DIR}/bin/python" sentence-transformers
+
+# 多言語モデル適用（Pythonスクリプト方式）
+COPY --chown=node:node apply-multilingual-model.py /tmp/
+RUN python3 /tmp/apply-multilingual-model.py /opt/mcp-servers/markdown-rag/server.py \
+ && rm /tmp/apply-multilingual-model.py
+
+# PyTorch: sentence-transformersが自動でCUDA 12.8版をインストール済み
+# ＊明示的なtorchインストール不要（重複回避、容量節約）
+# ＊実行時にGPU利用するには devcontainer.json で --gpus=all 設定が必要
+
+# 事前に埋め込みモデルをダウンロード（ビルド中にHuggingFaceキャッシュへ）
+# SentenceTransformerは自動でGPU/CPUを判別するため、明示的なdevice指定不要
+RUN "${VENV_DIR}/bin/python" -c \
+    "from sentence_transformers import SentenceTransformer; \
+     SentenceTransformer('sentence-transformers/paraphrase-multilingual-mpnet-base-v2'); \
+     print('Model cached successfully')"
+
+# venv の bin を優先（後工程＆起動時にツールが見つかるように）
+ENV PATH="${VENV_DIR}/bin:${PATH}"
+
 # Set default working directory
 WORKDIR /workspace
+CMD ["/bin/sh", "-c", "while sleep 1000; do :; done"]
