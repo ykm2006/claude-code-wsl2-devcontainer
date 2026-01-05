@@ -100,6 +100,46 @@
 
 ---
 
+### 📝 タスク 0.3: プロジェクトルート・各フォルダのお掃除 🌱
+
+**目的**: プロジェクト全体の不要ファイル・一時ファイルを整理
+
+**対象（現在の未追跡ファイル）**:
+
+```
+プロジェクトルート:
+- .mcp.json.bak
+- .mcp.sync-conflict-20250930-062442-J5I5O62.json
+- devcontainer.startup.warnings
+- tmp/
+
+.devcontainer/:
+- Dockerfile.backup_20251003_224305
+- Dockerfile.backup_20251004_074552
+- Dockerfile.fixed
+- Dockerfile.problem
+- devcontainer.json.backup_20251004_074552
+- devcontainer.json.bak
+- mcp-markdown-rag-multilingual.patch
+- mcp-markdown-rag-multilingual.patch.backup_20251004_074552
+```
+
+**実行項目**:
+
+- [ ] 各ファイルの必要性を確認
+- [ ] 不要ファイルの削除
+- [ ] `tmp/` ディレクトリの整理（必要なら `.gitignore` 追加）
+- [ ] SyncThing競合ファイル（`.sync-conflict-*`）の削除
+- [ ] git コミット
+
+**受け入れ基準**:
+
+- [ ] 未追跡の不要ファイルが整理されている
+- [ ] プロジェクトルートがスッキリしている
+- [ ] `.gitignore` が適切に設定されている
+
+---
+
 ## フェーズ 1: 研究・プロトタイプ
 
 ### 🔍 タスク 1.1: Docker Compose + DevContainer 最小構成検証 🌱
