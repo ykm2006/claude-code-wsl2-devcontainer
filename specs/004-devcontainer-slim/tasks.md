@@ -140,6 +140,59 @@
 
 ---
 
+### 🛠️ タスク 0.4: Docker-in-Docker 対応 🌱
+
+**目的**: DevContainer内からDockerビルドをテスト可能にし、開発TATを短縮
+
+**背景**:
+
+現状の開発サイクル（TAT 10分+）：
+```
+修正 → Build → エラー → 戻す → Build → VS Code起動 → Claude起動 → ペースト
+```
+
+改善後（TAT 1-2分）：
+```
+修正 → docker build → エラー表示 → その場で修正 → 成功したら適用
+```
+
+**実装方法（いずれか）**:
+
+1. **Docker-in-Docker Feature（推奨）**:
+```json
+{
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  }
+}
+```
+
+2. **Docker Socket Mount**:
+```json
+{
+  "mounts": [
+    "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+  ]
+}
+```
+
+**実行項目**:
+
+- [ ] 実装方法の選定（Docker-in-Docker vs Socket Mount）
+- [ ] `devcontainer.json.wsl2` への追加
+- [ ] `devcontainer.json.linux` への追加
+- [ ] DevContainer再構築
+- [ ] `docker build` コマンドが動作することを確認
+- [ ] git コミット
+
+**受け入れ基準**:
+
+- [ ] DevContainer内から `docker --version` が成功
+- [ ] DevContainer内から `docker build` が成功
+- [ ] Claude Codeセッション維持しながらDockerビルドテスト可能
+
+---
+
 ## フェーズ 1: 研究・プロトタイプ
 
 ### 🔍 タスク 1.1: Docker Compose + DevContainer 最小構成検証 🌱
