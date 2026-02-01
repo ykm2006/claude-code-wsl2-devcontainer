@@ -63,7 +63,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     python3-dev \
     build-essential \
     # Network tools (#32)
-    # TODO: iproute2, dnsutils
+    iproute2 \
+    dnsutils \
     # Shell linter (#33)
     # TODO: shellcheck
     && rm -rf /var/lib/apt/lists/*
