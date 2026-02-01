@@ -33,7 +33,7 @@ services:
   minimal:
     build:
       context: .
-      dockerfile: Dockerfile.minimal
+      dockerfile: minimal/Dockerfile
       args:
         <<: *build-args
     image: devcontainer-minimal:latest
@@ -52,7 +52,7 @@ services:
   dev:
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: dev/Dockerfile
       args:
         <<: *build-args
     image: devcontainer-dev:latest
@@ -71,7 +71,7 @@ services:
   dev-rag:
     build:
       context: .
-      dockerfile: Dockerfile.dev-rag
+      dockerfile: dev-rag/Dockerfile
       args:
         <<: *build-args
     image: devcontainer-dev-rag:latest

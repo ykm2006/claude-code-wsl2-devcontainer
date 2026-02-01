@@ -32,6 +32,6 @@
     "source=/mnt/d,target=/mnt/d,type=bind,consistency=cached"
   ],
 
-  "postCreateCommand": "echo 'Minimal environment ready! (WSL2)'",
+  "postCreateCommand": "echo '🐳 Minimal environment ready! (WSL2)'",
   "postStartCommand": ""
 }

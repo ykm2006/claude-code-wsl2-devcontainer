@@ -37,6 +37,6 @@
     "source=/mnt/d,target=/mnt/d,type=bind,consistency=cached"
   ],
 
-  "postCreateCommand": "echo 'Dev environment ready! (WSL2)'",
+  "postCreateCommand": "echo '🐳 Dev environment ready! (WSL2)'",
   "postStartCommand": ""
 }

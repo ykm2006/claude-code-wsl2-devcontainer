@@ -178,6 +178,7 @@
 - [ ] T057 [P] Update README.md with new environment setup instructions
 - [ ] T058 [P] Update CLAUDE.md with new devcontainer structure reference
 - [ ] T059 Document troubleshooting guide for common issues
+- [ ] T067 [P] Create .devcontainer/README.md with architecture documentation (3環境構成、RAG/Qdrant/Volume説明、再利用手順)
 - [ ] T060 Cross-platform test: Verify all environments work on WSL2
 - [ ] T061 Cross-platform test: Verify all environments work on KDE Neon
 - [ ] T062 Performance validation: Measure actual build times and image sizes

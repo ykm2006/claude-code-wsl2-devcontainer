@@ -32,6 +32,6 @@
 
   "features": {},
 
-  "postCreateCommand": "echo 'Dev environment ready!'",
+  "postCreateCommand": "echo '🐳 Dev environment ready!'",
   "postStartCommand": ""
 }

@@ -27,6 +27,6 @@
 
   "features": {},
 
-  "postCreateCommand": "echo 'Minimal environment ready!'",
+  "postCreateCommand": "echo '🐳 Minimal environment ready!'",
   "postStartCommand": ""
 }

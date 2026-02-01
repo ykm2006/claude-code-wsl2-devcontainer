@@ -34,6 +34,6 @@
 
   "features": {},
 
-  "postCreateCommand": "echo 'Dev-RAG environment ready!'",
+  "postCreateCommand": "echo '🐳 Dev-RAG environment ready!'",
   "postStartCommand": ""
 }

@@ -39,6 +39,6 @@
     "source=/mnt/d,target=/mnt/d,type=bind,consistency=cached"
   ],
 
-  "postCreateCommand": "echo 'Dev-RAG environment ready! (WSL2)'",
+  "postCreateCommand": "echo '🐳 Dev-RAG environment ready! (WSL2)'",
   "postStartCommand": ""
 }
