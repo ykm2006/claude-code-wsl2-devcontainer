@@ -214,37 +214,15 @@ curl -X POST http://localhost:8000/search \
 
 ## トラブルシューティング
 
-### GPU が認識されない
+よくある問題と解決方法は **[TROUBLESHOOTING.md](./TROUBLESHOOTING.md)** を参照してください。
 
-```bash
-# コンテナ内で確認
-nvidia-smi
-
-# 認識されない場合
-# → ホストに NVIDIA Driver がインストールされているか確認
-# → docker-compose.yml の GPU 設定を確認
-```
-
-### Qdrant に接続できない
-
-```bash
-# Qdrant コンテナが起動しているか確認
-docker ps | grep qdrant
-
-# ネットワーク接続確認
-curl http://qdrant:6333/health
-```
-
-### Volume のデータをバックアップしたい
-
-```bash
-# Volume の場所を確認
-docker volume inspect qdrant_storage
-
-# バックアップ（例）
-docker run --rm -v qdrant_storage:/data -v $(pwd):/backup \
-  alpine tar czf /backup/qdrant-backup.tar.gz /data
-```
+カバーしている内容：
+- ビルドエラー（Docker デーモン、ディスク容量、Dockerfile）
+- GPU 関連（ドライバ、CUDA バージョン、メモリ）
+- ボリュームマウント（パーミッション、パス）
+- ネットワーク（プロキシ、DNS、コンテナ間通信）
+- VS Code 拡張機能
+- クイックリファレンス・完全リセット手順
 
 ---
 
