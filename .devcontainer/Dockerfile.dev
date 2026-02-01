@@ -110,10 +110,11 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && rm -rf /var/lib/apt/lists/*
 
 # =============================================================================
-# Python (uv)
+# uv (Python package manager)
 # =============================================================================
 
-# TODO: #30 - uv package manager
+USER ${USERNAME}
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # =============================================================================
 # Bun
