@@ -61,6 +61,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     python3-pip \
     python3-venv \
     python3-dev \
+    python-is-python3 \
     build-essential \
     # Network tools (#32)
     iproute2 \
