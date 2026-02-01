@@ -1,0 +1,27 @@
+# DevContainer Multi-Environment Configuration
+# Environments: minimal, dev, dev-rag
+version: '3.8'
+
+services:
+  # Minimal environment - Claude Code only (Phase 3 で追加)
+  # minimal:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.minimal
+
+  # Dev environment - Python + Bun (Phase 4 で追加)
+  # dev:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.dev
+
+  # Dev-RAG environment - ML/RAG (Phase 5 で追加, profile: rag)
+  # dev-rag:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.dev-rag
+
+# Common configuration will be added in Phase 2:
+# - Build args (T009)
+# - Volume mounts (T010)
+# - BuildKit configuration (T011)
