@@ -113,7 +113,13 @@
       "mcp__github__create_issue",
       "mcp__github__update_issue",
       "Bash(git mv:*)",
-      "Bash(git status:*)"
+      "Bash(git status:*)",
+      "Bash(git rm:*)",
+      "Bash(docker compose:*)",
+      "Bash(for i in 14 15 16 17 18 19 20 21 22)",
+      "Bash(do)",
+      "Bash(done)",
+      "mcp__github__add_issue_comment"
     ],
     "deny": [],
     "ask": []
