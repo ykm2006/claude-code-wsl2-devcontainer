@@ -2,26 +2,78 @@
 # Environments: minimal, dev, dev-rag
 version: '3.8'
 
+# =============================================================================
+# Common Configuration (YAML Anchors)
+# =============================================================================
+
+# Build arguments - shared across all environments
+x-build-args: &build-args
+  USERNAME: node
+  USER_UID: 1000
+  USER_GID: 1000
+
+# Environment variables - shared across all environments
+x-common-env: &common-env
+  TZ: Asia/Tokyo
+  LANG: ja_JP.UTF-8
+  LANGUAGE: ja_JP:ja
+  LC_ALL: ja_JP.UTF-8
+  TERM: xterm-256color
+
+# Volume mounts - shared across all environments
+x-volumes: &common-volumes
+  - ${HOME}/.claude:/home/node/.claude:cached
+  - ..:/workspace:cached
+
+# =============================================================================
+# Services
+# =============================================================================
+
 services:
   # Minimal environment - Claude Code only (Phase 3 で追加)
   # minimal:
   #   build:
   #     context: .
   #     dockerfile: Dockerfile.minimal
+  #     args:
+  #       <<: *build-args
+  #   environment:
+  #     <<: *common-env
+  #     DEVCONTAINER_ENV: minimal
+  #   volumes: *common-volumes
 
   # Dev environment - Python + Bun (Phase 4 で追加)
   # dev:
   #   build:
   #     context: .
   #     dockerfile: Dockerfile.dev
+  #     args:
+  #       <<: *build-args
+  #   environment:
+  #     <<: *common-env
+  #     DEVCONTAINER_ENV: dev
+  #   volumes: *common-volumes
 
   # Dev-RAG environment - ML/RAG (Phase 5 で追加, profile: rag)
   # dev-rag:
   #   build:
   #     context: .
   #     dockerfile: Dockerfile.dev-rag
+  #     args:
+  #       <<: *build-args
+  #   environment:
+  #     <<: *common-env
+  #     DEVCONTAINER_ENV: dev-rag
+  #   volumes: *common-volumes
+  #   profiles:
+  #     - rag
 
-# Common configuration will be added in Phase 2:
-# - Build args (T009)
-# - Volume mounts (T010)
-# - BuildKit configuration (T011)
+# =============================================================================
+# Notes
+# =============================================================================
+# BuildKit: Enable with environment variables before build:
+#   export DOCKER_BUILDKIT=1
+#   export COMPOSE_DOCKER_CLI_BUILD=1
+#
+# Docker socket mount (if needed for Docker-in-Docker):
+#   Add to volumes: /var/run/docker.sock:/var/run/docker.sock
