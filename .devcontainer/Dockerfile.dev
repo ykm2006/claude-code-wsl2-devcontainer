@@ -111,20 +111,6 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && rm -rf /var/lib/apt/lists/*
 
 # =============================================================================
-# uv (Python package manager)
-# =============================================================================
-
-USER ${USERNAME}
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh
-
-# =============================================================================
-# Bun (JavaScript/TypeScript runtime)
-# =============================================================================
-
-USER ${USERNAME}
-RUN curl -fsSL https://bun.sh/install | bash
-
-# =============================================================================
 # Non-root User
 # =============================================================================
 
@@ -136,6 +122,19 @@ RUN groupadd --gid ${USER_GID} ${USERNAME} \
 # Set up user directories
 RUN mkdir -p /home/${USERNAME}/.local/bin \
     && chown -R ${USERNAME}:${USERNAME} /home/${USERNAME}
+
+# =============================================================================
+# uv (Python package manager)
+# =============================================================================
+
+USER ${USERNAME}
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# =============================================================================
+# Bun (JavaScript/TypeScript runtime)
+# =============================================================================
+
+RUN curl -fsSL https://bun.sh/install | bash
 
 # =============================================================================
 # Oh My Zsh and Plugins (as user)
