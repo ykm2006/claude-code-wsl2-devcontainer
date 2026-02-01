@@ -16,8 +16,10 @@ NC='\033[0m' # No Color
 # パス定義
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
-SOURCE_DIR="$PROJECT_ROOT/.devcontainer"
-TARGET_DIR="/workspace/.devcontainer"
+SOURCE_DEVCONTAINER="$PROJECT_ROOT/.devcontainer"
+SOURCE_SCRIPTS="$PROJECT_ROOT/scripts"
+TARGET_DEVCONTAINER="/workspace/.devcontainer"
+TARGET_SCRIPTS="/workspace/scripts"
 BACKUP_DIR="/workspace/.devcontainer-backups"
 
 # ヘルパー関数
@@ -71,9 +73,13 @@ create_backup() {
 
     mkdir -p "$BACKUP_DIR"
 
-    if [[ -d "$TARGET_DIR" ]]; then
+    if [[ -d "$TARGET_DEVCONTAINER" ]]; then
         info "バックアップを作成中: $backup_path"
-        cp -r "$TARGET_DIR" "$backup_path"
+        mkdir -p "$backup_path"
+        cp -r "$TARGET_DEVCONTAINER" "$backup_path/.devcontainer"
+        if [[ -d "$TARGET_SCRIPTS" ]]; then
+            cp -r "$TARGET_SCRIPTS" "$backup_path/scripts"
+        fi
         success "バックアップ完了: $backup_path"
         echo "$backup_path"
     else
@@ -109,8 +115,18 @@ rollback() {
     create_backup
 
     # ロールバック実行
-    rm -rf "$TARGET_DIR"
-    cp -r "$backup_path" "$TARGET_DIR"
+    if [[ -d "$backup_path/.devcontainer" ]]; then
+        rm -rf "$TARGET_DEVCONTAINER"
+        cp -r "$backup_path/.devcontainer" "$TARGET_DEVCONTAINER"
+        success ".devcontainer を復元"
+    fi
+
+    if [[ -d "$backup_path/scripts" ]]; then
+        rm -rf "$TARGET_SCRIPTS"
+        cp -r "$backup_path/scripts" "$TARGET_SCRIPTS"
+        chmod +x "$TARGET_SCRIPTS"/*
+        success "scripts を復元"
+    fi
 
     success "ロールバック完了"
 }
@@ -121,19 +137,19 @@ deploy() {
     local force=${2:-false}
 
     # ソースの確認
-    if [[ ! -d "$SOURCE_DIR" ]]; then
-        error "ソースディレクトリが存在しません: $SOURCE_DIR"
+    if [[ ! -d "$SOURCE_DEVCONTAINER" ]]; then
+        error "ソースディレクトリが存在しません: $SOURCE_DEVCONTAINER"
     fi
 
     # デプロイ内容の表示
     echo -e "${BLUE}デプロイ内容:${NC}"
-    echo "  ソース: $SOURCE_DIR"
-    echo "  デプロイ先: $TARGET_DIR"
+    echo "  .devcontainer: $SOURCE_DEVCONTAINER → $TARGET_DEVCONTAINER"
+    echo "  scripts: $SOURCE_SCRIPTS → $TARGET_SCRIPTS"
     echo ""
-    echo -e "${BLUE}コピーされるファイル:${NC}"
+    echo -e "${BLUE}コピーされるファイル (.devcontainer/):${NC}"
 
-    # コピー対象
-    local files=(
+    # .devcontainer コピー対象
+    local devcontainer_files=(
         "docker-compose.yml"
         "README.md"
         "TROUBLESHOOTING.md"
@@ -143,8 +159,23 @@ deploy() {
         "shared/"
     )
 
-    for file in "${files[@]}"; do
-        if [[ -e "$SOURCE_DIR/$file" ]]; then
+    # scripts コピー対象（deploy.sh 自体は除外）
+    local script_files=(
+        "code"
+        "setup-devcontainer.sh"
+    )
+
+    for file in "${devcontainer_files[@]}"; do
+        if [[ -e "$SOURCE_DEVCONTAINER/$file" ]]; then
+            echo "  - $file"
+        fi
+    done
+
+    echo ""
+    echo -e "${BLUE}コピーされるファイル (scripts/):${NC}"
+
+    for file in "${script_files[@]}"; do
+        if [[ -e "$SOURCE_SCRIPTS/$file" ]]; then
             echo "  - $file"
         fi
     done
@@ -171,15 +202,27 @@ deploy() {
     backup_path=$(create_backup)
 
     # ターゲットディレクトリの準備
-    mkdir -p "$TARGET_DIR"
+    mkdir -p "$TARGET_DEVCONTAINER"
+    mkdir -p "$TARGET_SCRIPTS"
 
-    # ファイルのコピー
-    info "ファイルをコピー中..."
+    # .devcontainer ファイルのコピー
+    info ".devcontainer をコピー中..."
 
-    for file in "${files[@]}"; do
-        if [[ -e "$SOURCE_DIR/$file" ]]; then
-            cp -r "$SOURCE_DIR/$file" "$TARGET_DIR/"
-            success "  $file"
+    for file in "${devcontainer_files[@]}"; do
+        if [[ -e "$SOURCE_DEVCONTAINER/$file" ]]; then
+            cp -r "$SOURCE_DEVCONTAINER/$file" "$TARGET_DEVCONTAINER/"
+            success "  .devcontainer/$file"
+        fi
+    done
+
+    # scripts ファイルのコピー
+    info "scripts をコピー中..."
+
+    for file in "${script_files[@]}"; do
+        if [[ -e "$SOURCE_SCRIPTS/$file" ]]; then
+            cp -r "$SOURCE_SCRIPTS/$file" "$TARGET_SCRIPTS/"
+            chmod +x "$TARGET_SCRIPTS/$file"
+            success "  scripts/$file"
         fi
     done
 
@@ -192,8 +235,8 @@ deploy() {
 
     if [[ -n "$backup_path" ]]; then
         for file in "${preserve_files[@]}"; do
-            if [[ -e "$backup_path/$file" && ! -e "$TARGET_DIR/$file" ]]; then
-                cp -r "$backup_path/$file" "$TARGET_DIR/"
+            if [[ -e "$backup_path/.devcontainer/$file" && ! -e "$TARGET_DEVCONTAINER/$file" ]]; then
+                cp -r "$backup_path/.devcontainer/$file" "$TARGET_DEVCONTAINER/"
                 info "  既存設定を保持: $file"
             fi
         done
@@ -203,9 +246,16 @@ deploy() {
     success "デプロイ完了！"
     echo ""
     echo -e "${BLUE}次のステップ:${NC}"
-    echo "  1. VS Code で /workspace を開く"
-    echo "  2. 「Reopen in Container」で環境を選択"
-    echo "  3. 動作確認"
+    echo "  1. 環境を自動検出して VS Code を起動:"
+    echo "     /workspace/scripts/code /workspace"
+    echo ""
+    echo "  2. または手動で VS Code を起動:"
+    echo "     - VS Code で /workspace を開く"
+    echo "     - 「Reopen in Container」で環境を選択"
+    echo ""
+    echo -e "${BLUE}scripts/code の機能:${NC}"
+    echo "  - WSL2/Linux 環境を自動検出"
+    echo "  - 適切な devcontainer.json を自動設定"
     echo ""
     if [[ -n "$backup_path" ]]; then
         echo -e "${YELLOW}ロールバック方法:${NC}"
