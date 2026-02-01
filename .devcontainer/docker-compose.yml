@@ -30,17 +30,24 @@ x-volumes: &common-volumes
 # =============================================================================
 
 services:
-  # Minimal environment - Claude Code only (Phase 3 で追加)
-  # minimal:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile.minimal
-  #     args:
-  #       <<: *build-args
-  #   environment:
-  #     <<: *common-env
-  #     DEVCONTAINER_ENV: minimal
-  #   volumes: *common-volumes
+  # Minimal environment - Claude Code only
+  minimal:
+    build:
+      context: .
+      dockerfile: Dockerfile.minimal
+      args:
+        <<: *build-args
+    image: devcontainer-minimal:latest
+    container_name: devcontainer-minimal
+    environment:
+      <<: *common-env
+      DEVCONTAINER_ENV: minimal
+    volumes: *common-volumes
+    working_dir: /workspace
+    user: node
+    tty: true
+    stdin_open: true
+    command: sleep infinity
 
   # Dev environment - Python + Bun (Phase 4 で追加)
   # dev:
