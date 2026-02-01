@@ -25,7 +25,7 @@ Docker Compose によるサービス分離で、用途別に最適化された 3
 | シェル | Zsh + Oh My Zsh + Powerlevel10k | 最新 |
 | GPU サポート | NVIDIA CUDA | ホスト依存 |
 
-**Storage**: ファイルシステムのみ（ホストマウント: ~/.claude, /workspace）
+**Storage**: ファイルシステムのみ（ホストマウント: ~/.claude, ~/.claude.json, /workspace）
 
 **Testing Strategy**:
 1. `docker compose build` - イメージビルド検証

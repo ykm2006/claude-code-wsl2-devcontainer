@@ -109,7 +109,7 @@
 
 - **Environment（環境）**: Minimal, Dev などの DevContainer 構成。Dockerfile、devcontainer.json、サービス定義を含む
 - **Service（サービス）**: Docker Compose で定義される個別のコンテナ。profiles で有効化/無効化を制御
-- **Host Mount（ホストマウント）**: ホストOS とコンテナ間で共有されるディレクトリ（`~/.claude`, ワークスペースなど）
+- **Host Mount（ホストマウント）**: ホストOS とコンテナ間で共有されるディレクトリ（`~/.claude`, `~/.claude.json`, ワークスペースなど）。Claude Code の認証永続化には `~/.claude` ディレクトリと `~/.claude.json` ファイルの両方が必要
 
 ### Assumptions
 

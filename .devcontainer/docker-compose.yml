@@ -22,6 +22,7 @@ x-common-env: &common-env
 # Volume mounts - shared across all environments
 x-volumes: &common-volumes
   - ${HOME}/.claude:/home/node/.claude:cached
+  - ${HOME}/.claude.json:/home/node/.claude.json:cached
   - ..:/workspace:cached
 
 # =============================================================================
@@ -37,6 +38,7 @@ services:
       args:
         <<: *build-args
     image: devcontainer-minimal:latest
+    hostname: devcontainer-minimal
     container_name: devcontainer-minimal
     environment:
       <<: *common-env
@@ -56,6 +58,7 @@ services:
       args:
         <<: *build-args
     image: devcontainer-dev:latest
+    hostname: devcontainer-dev
     container_name: devcontainer-dev
     environment:
       <<: *common-env
@@ -75,6 +78,7 @@ services:
       args:
         <<: *build-args
     image: devcontainer-dev-rag:latest
+    hostname: devcontainer-dev-rag
     container_name: devcontainer-dev-rag
     environment:
       <<: *common-env
