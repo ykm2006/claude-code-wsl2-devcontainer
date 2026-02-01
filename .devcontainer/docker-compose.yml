@@ -67,19 +67,56 @@ services:
     stdin_open: true
     command: sleep infinity
 
-  # Dev-RAG environment - ML/RAG (Phase 5 で追加, profile: rag)
-  # dev-rag:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile.dev-rag
-  #     args:
-  #       <<: *build-args
-  #   environment:
-  #     <<: *common-env
-  #     DEVCONTAINER_ENV: dev-rag
-  #   volumes: *common-volumes
-  #   profiles:
-  #     - rag
+  # Dev-RAG environment - ML/RAG with GPU support
+  dev-rag:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev-rag
+      args:
+        <<: *build-args
+    image: devcontainer-dev-rag:latest
+    container_name: devcontainer-dev-rag
+    environment:
+      <<: *common-env
+      DEVCONTAINER_ENV: dev-rag
+      QDRANT_HOST: qdrant
+      QDRANT_PORT: "6333"
+    volumes: *common-volumes
+    working_dir: /workspace
+    user: node
+    tty: true
+    stdin_open: true
+    command: sleep infinity
+    profiles:
+      - rag
+    depends_on:
+      - qdrant
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+  # Qdrant vector database (for RAG)
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: devcontainer-qdrant
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_storage:/qdrant/storage
+    profiles:
+      - rag
+
+# =============================================================================
+# Volumes
+# =============================================================================
+
+volumes:
+  qdrant_storage:
 
 # =============================================================================
 # Notes

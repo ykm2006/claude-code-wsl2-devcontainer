@@ -5,6 +5,7 @@
 .devcontainer/devcontainer.json
 .devcontainer/minimal/devcontainer.json
 .devcontainer/dev/devcontainer.json
+.devcontainer/dev-rag/devcontainer.json
 
 # Temporary files
 .tmp/
