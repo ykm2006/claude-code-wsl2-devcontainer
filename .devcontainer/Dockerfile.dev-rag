@@ -163,6 +163,14 @@ RUN pip install --no-cache-dir --break-system-packages \
 # Multilingual Embedding Model (#44)
 # =============================================================================
 
+# Set shared model cache directory accessible by all users
+ENV SENTENCE_TRANSFORMERS_HOME=/opt/models/sentence-transformers
+ENV HF_HOME=/opt/models/huggingface
+
+# Create model directories
+RUN mkdir -p /opt/models/sentence-transformers /opt/models/huggingface \
+    && chmod -R 777 /opt/models
+
 # Pre-download paraphrase-multilingual-mpnet-base-v2 model
 # This avoids download on first use and ensures the model is cached in the image
 RUN python3 -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('paraphrase-multilingual-mpnet-base-v2')"
