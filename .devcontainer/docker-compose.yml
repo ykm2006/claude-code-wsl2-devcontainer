@@ -48,17 +48,24 @@ services:
     stdin_open: true
     command: sleep infinity
 
-  # Dev environment - Python + Bun (Phase 4 で追加)
-  # dev:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile.dev
-  #     args:
-  #       <<: *build-args
-  #   environment:
-  #     <<: *common-env
-  #     DEVCONTAINER_ENV: dev
-  #   volumes: *common-volumes
+  # Dev environment - Python + Bun
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      args:
+        <<: *build-args
+    image: devcontainer-dev:latest
+    container_name: devcontainer-dev
+    environment:
+      <<: *common-env
+      DEVCONTAINER_ENV: dev
+    volumes: *common-volumes
+    working_dir: /workspace
+    user: node
+    tty: true
+    stdin_open: true
+    command: sleep infinity
 
   # Dev-RAG environment - ML/RAG (Phase 5 で追加, profile: rag)
   # dev-rag:
