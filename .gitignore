@@ -6,6 +6,14 @@
 
 # Temporary files
 .tmp/
+tmp/
+devcontainer.startup.warnings
+
+# Backup files
+*.bak
+
+# SyncThing conflict files
+*.sync-conflict-*
 
 # OS generated files
 .DS_Store
