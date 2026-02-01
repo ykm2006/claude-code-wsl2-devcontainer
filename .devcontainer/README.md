@@ -149,7 +149,51 @@ GET  /health     ... ヘルスチェック
 
 ## 使い方
 
-### 環境の起動
+### クロスプラットフォーム対応（推奨）
+
+本プロジェクトは **WSL2** と **Native Linux** の両環境に対応しています。`scripts/code` コマンドを使用すると、環境を自動検出して適切な設定で VS Code を起動できます。
+
+#### セットアップ
+
+```bash
+# scripts ディレクトリを PATH に追加（~/.zshrc または ~/.bashrc）
+export PATH="/workspace/scripts:$PATH"
+```
+
+または、エイリアスを設定：
+
+```bash
+# ~/.zshrc または ~/.bashrc
+alias code='/workspace/scripts/code'
+```
+
+#### 使用方法
+
+```bash
+# 自動環境検出 + VS Code 起動
+code /workspace
+
+# 内部動作:
+# 1. WSL2 か Native Linux かを自動判定
+# 2. 適切な devcontainer.json を設定
+#    - WSL2 → devcontainer.json.wsl2 を使用
+#    - Linux → devcontainer.json.linux を使用
+# 3. VS Code を起動
+```
+
+#### 仕組み
+
+```
+scripts/
+├── code                    # VS Code 起動ラッパー
+└── setup-devcontainer.sh   # 環境検出 & 設定切替
+```
+
+- `setup-devcontainer.sh` が `/proc/version` を確認して環境を判定
+- WSL2 の場合は `microsoft` という文字列が含まれる
+- 判定結果に応じて `devcontainer.json.wsl2` または `devcontainer.json.linux` を `devcontainer.json` にコピー
+
+### 手動での環境起動
 
 VS Code で「Reopen in Container」→ 使いたい環境を選択。
 
