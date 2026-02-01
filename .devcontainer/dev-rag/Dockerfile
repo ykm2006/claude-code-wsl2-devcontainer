@@ -268,8 +268,8 @@ RUN git config --global core.pager delta \
 # Init Scripts
 # =============================================================================
 
-# init-speckit.sh, init-serena-mcp.sh はワークスペースにあるため
-# コンテナ内から /workspace/.devcontainer/*.sh で実行可能
+# init-speckit.sh, init-serena-mcp.sh は shared/ にあるため
+# コンテナ内から /workspace/.devcontainer/shared/*.sh で実行可能
 
 # =============================================================================
 # Final Setup
