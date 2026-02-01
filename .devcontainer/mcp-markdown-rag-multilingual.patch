@@ -1,0 +1,28 @@
+--- server.py	2025-10-04 00:25:08.731016800 +0900
++++ server.py	2025-10-04 00:11:26.478384207 +0900
+@@ -6,6 +6,7 @@
+ from llama_index.core.text_splitter import TokenTextSplitter
+ from pydantic import Field
+ from pymilvus import MilvusClient, model
++from pymilvus.model.dense import SentenceTransformerEmbeddingFunction
+
+ from utils import (
+     COLLECTION_NAME,
+@@ -30,7 +31,15 @@
+ if not os.path.exists(INDEX_DATA_PATH):
+     os.makedirs(INDEX_DATA_PATH)
+ milvus_client = MilvusClient(os.path.join(INDEX_DATA_PATH, "milvus_markdown.db"))
+-embedding_fn = model.DefaultEmbeddingFunction()
++# Use multilingual model for Japanese and English semantic search (Task 22)
++# GPU acceleration enabled (Task 25.5) - automatically detects CUDA availability
++import torch
++device = "cuda" if torch.cuda.is_available() else "cpu"
++print(f"MCP-Markdown-RAG: Using device: {device}")
++embedding_fn = SentenceTransformerEmbeddingFunction(
++    model_name="sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
++    device=device,
++    normalize_embeddings=True
++)
+
+
+ def search(query: str, k: int) -> list[list[SearchResult]]:

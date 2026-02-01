@@ -27,9 +27,21 @@ Establish unified DevContainer configurations across multiple development enviro
 ## Development Workflow
 
 ### Progress Tracking
-- **Primary Reference**: `specs/003-cross-platform-devcontainer/tasks.md` (tasks status, detailed steps)
+- **Primary Reference**: `specs/<feature>/tasks.md` (tasks status, detailed steps)
 - **Project State**: Serena Memory (project history, context, decisions)
 - **This File (CLAUDE.md)**: Behavioral guidelines only (communication style, development principles)
+
+### Task Management Strategy
+
+**計画フェーズ**: `tasks.md` でタスク全体を俯瞰
+**実装フェーズ**: GitHub Issues で個別タスクを参照
+
+`/speckit.taskstoissues` を使って tasks.md を GitHub Issues に変換することで、**コンテキスト効率**が大幅に向上する：
+
+- tasks.md を読む → 全タスク分のテキストがコンテキストに入る
+- `gh issue view #123` → 1タスク分だけ取得
+
+Issue には spec.md/plan.md の該当セクションへのリンクを含めることで、「この Issue だけ読めば実装に必要な情報が揃う」状態を作れる。
 
 ### Key Development Principles
 - **Specification-Driven Development**: Use `/specify`, `/plan`, `/tasks` commands
