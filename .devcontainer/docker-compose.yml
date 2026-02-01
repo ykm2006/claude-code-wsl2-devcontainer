@@ -1,6 +1,5 @@
 # DevContainer Multi-Environment Configuration
 # Environments: minimal, dev, dev-rag
-version: '3.8'
 
 # =============================================================================
 # Common Configuration (YAML Anchors)

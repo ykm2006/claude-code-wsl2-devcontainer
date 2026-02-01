@@ -16,6 +16,7 @@ ENV LANG=ja_JP.UTF-8
 ENV LANGUAGE=ja_JP:ja
 ENV LC_ALL=ja_JP.UTF-8
 ENV TERM=xterm-256color
+ENV PATH="/home/node/.local/bin:${PATH}"
 
 # Labels
 LABEL maintainer="ykm2006"
@@ -119,7 +120,7 @@ RUN git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting \
 # Claude Code
 # =============================================================================
 
-RUN curl -fsSL https://claude.ai/install.sh | sh
+RUN curl -fsSL https://claude.ai/install.sh | bash
 
 # =============================================================================
 # Shell Configuration
