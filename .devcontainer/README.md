@@ -187,6 +187,18 @@ curl -X POST http://localhost:8000/search \
   -d '{"query": "Docker", "top_k": 5}'
 ```
 
+### Qdrant の動作確認
+
+```bash
+# Qdrant のバージョン・状態確認（ルートエンドポイント）
+curl http://qdrant:6333/
+
+# コレクション一覧
+curl http://qdrant:6333/collections
+```
+
+> **Note**: `/health` エンドポイントは存在しません。`/` でバージョン情報が返れば正常動作しています。
+
 ## 他プロジェクトでの再利用
 
 ### 最小構成でコピーするファイル

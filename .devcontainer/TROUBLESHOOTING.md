@@ -449,7 +449,10 @@ docker network inspect <network-name>
 
 # 3. コンテナ内から疎通確認
 docker exec -it <container> ping <other-container>
-docker exec -it <container> curl http://<other-container>:<port>/health
+docker exec -it <container> curl http://<other-container>:<port>/
+
+# Qdrant の場合（/health は存在しない、/ でバージョン情報が返る）
+curl http://qdrant:6333/
 ```
 
 ```yaml
