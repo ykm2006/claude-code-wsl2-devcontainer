@@ -2,7 +2,7 @@
 #
 # code command wrapper
 # Automatically detects the environment (WSL2 or native Linux) and sets up the correct
-# devcontainer.json symlink before launching VS Code.
+# devcontainer.json before launching VS Code.
 #
 
 set -e
@@ -30,16 +30,24 @@ log_error() {
   echo -e "${RED}[ERROR]${NC} $1"
 }
 
-# Execute setup-devcontainer-symlink.sh
-log_info "Setting up devcontainer.json symlink..."
-bash "$SCRIPT_DIR/setup-devcontainer-symlink.sh"
+# Execute setup-devcontainer.sh
+log_info "Setting up devcontainer.json..."
+bash "$SCRIPT_DIR/setup-devcontainer.sh"
 
 if [ $? -ne 0 ]; then
-  log_error "Failed to set up devcontainer.json symlink"
+  log_error "Failed to set up devcontainer.json"
   exit 1
 fi
 
+# Call the actual code command with all arguments
 log_info "Launching VS Code..."
 
-# Call the actual code command with all arguments
-/usr/bin/code "$@"
+# Find the actual VS Code command (excluding this script)
+VSCODE_CMD=$(which -a code 2>/dev/null | grep -v "$SCRIPT_DIR/code" | head -1)
+
+if [ -z "$VSCODE_CMD" ] || [ ! -x "$VSCODE_CMD" ]; then
+  log_error "VS Code not found in PATH"
+  exit 1
+fi
+
+exec "$VSCODE_CMD" "$@"

@@ -52,6 +52,48 @@ Then follow the on-screen instructions to launch VS Code and start developing!
 - 8GB+ RAM recommended
 - 20GB+ free disk space
 
+## 🔄 Environment Setup (WSL2 / Linux Auto-Detection)
+
+This project supports both **WSL2** and **native Linux** environments. A setup script automatically detects your environment and configures the appropriate DevContainer settings.
+
+### Why This Matters
+- **WSL2**: Requires `/mnt/c` and `/mnt/d` mounts for Windows drive access
+- **Native Linux**: No Windows drive mounts needed
+
+### Quick Setup
+
+```bash
+# For standard (full) environment
+bash scripts/setup-devcontainer.sh
+
+# For minimal environment (Claude Code only)
+bash scripts/setup-devcontainer.sh minimal
+```
+
+The script will:
+1. Detect if you're running on WSL2 or native Linux
+2. Copy the appropriate `devcontainer.json.wsl2` or `devcontainer.json.linux`
+3. Output the result for verification
+
+### Using the `code` Wrapper
+
+Instead of running the setup script manually, you can use the `code` wrapper which automatically runs setup before launching VS Code:
+
+```bash
+# Add scripts directory to PATH (add to ~/.bashrc or ~/.zshrc)
+export PATH="/path/to/claude-code-wsl2-devcontainer/scripts:$PATH"
+
+# Then simply run
+code .
+```
+
+### Available Configurations
+
+| Configuration | Description | Use Case |
+|--------------|-------------|----------|
+| `minimal/` | Claude Code only, lightweight | Quick AI-assisted coding |
+| `.devcontainer/` | Full stack (Python, Node, Rust, etc.) | Complete development environment |
+
 ## 🛠️ Installation
 
 ### Step 1: Clone Repository

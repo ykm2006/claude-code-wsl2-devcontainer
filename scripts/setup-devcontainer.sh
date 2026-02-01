@@ -1,17 +1,30 @@
 #!/bin/bash
 #
-# setup-devcontainer-symlink.sh
-# Automatically detects the environment (WSL2 or native Linux) and creates
-# the appropriate symlink for devcontainer.json.
+# setup-devcontainer.sh
+# Automatically detects the environment (WSL2 or native Linux) and copies
+# the appropriate devcontainer.json configuration.
 #
-# Usage: bash scripts/setup-devcontainer-symlink.sh
+# Note: Using copy instead of symlink due to VS Code Dev Containers
+#       not reliably following symlinks in WSL2 environments.
+#
+# Usage:
+#   bash scripts/setup-devcontainer.sh          # Setup for .devcontainer/
+#   bash scripts/setup-devcontainer.sh minimal  # Setup for .devcontainer/minimal/
 #
 
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
-DEVCONTAINER_DIR="$PROJECT_DIR/.devcontainer"
+
+# Subdirectory argument (optional)
+SUBDIR="${1:-}"
+
+if [ -n "$SUBDIR" ]; then
+  DEVCONTAINER_DIR="$PROJECT_DIR/.devcontainer/$SUBDIR"
+else
+  DEVCONTAINER_DIR="$PROJECT_DIR/.devcontainer"
+fi
 
 # Color codes for output
 RED='\033[0;31m'
@@ -64,29 +77,28 @@ detect_environment() {
 # Get available drives in WSL2
 get_wsl2_drives() {
   if [ -d "/mnt" ]; then
-    # List available drives: /mnt/c, /mnt/d, etc.
     ls -d /mnt/[a-z] 2>/dev/null | sed 's|/mnt/||' | tr '\n' ',' | sed 's/,$//'
   else
     echo ""
   fi
 }
 
-# Create symlink
-create_symlink() {
-  local target="$1"
-  local symlink_path="$DEVCONTAINER_DIR/devcontainer.json"
+# Copy config file (using copy instead of symlink due to VS Code Dev Containers issue)
+copy_config() {
+  local source="$1"
+  local dest_path="$DEVCONTAINER_DIR/devcontainer.json"
 
   # Remove existing symlink or file
-  if [ -L "$symlink_path" ] || [ -f "$symlink_path" ]; then
+  if [ -L "$dest_path" ] || [ -f "$dest_path" ]; then
     log_debug "Removing existing devcontainer.json"
-    rm -f "$symlink_path"
+    rm -f "$dest_path"
   fi
 
-  # Create new symlink
-  ln -s "$(basename "$target")" "$symlink_path"
+  # Copy instead of symlink
+  cp "$source" "$dest_path"
 
-  if [ ! -L "$symlink_path" ]; then
-    log_error "Failed to create symlink to $target"
+  if [ ! -f "$dest_path" ]; then
+    log_error "Failed to copy $source"
     return 1
   fi
 
@@ -96,6 +108,12 @@ create_symlink() {
 # Main logic
 main() {
   log_info "Detecting environment..."
+
+  if [ -n "$SUBDIR" ]; then
+    log_info "Target directory: .devcontainer/$SUBDIR/"
+  else
+    log_info "Target directory: .devcontainer/"
+  fi
 
   # Check required files
   if ! check_required_files; then
@@ -117,13 +135,13 @@ main() {
         log_debug "Available drives: $DRIVES"
       fi
 
-      # Create symlink to WSL2 version
-      if create_symlink "$DEVCONTAINER_DIR/devcontainer.json.wsl2"; then
-        log_info "Created symlink to devcontainer.json.wsl2"
+      # Copy WSL2 config
+      if copy_config "$DEVCONTAINER_DIR/devcontainer.json.wsl2"; then
+        log_info "Copied devcontainer.json.wsl2 → devcontainer.json"
         log_info "✅ Setup complete for WSL2 environment"
         return 0
       else
-        log_error "Failed to create symlink for WSL2"
+        log_error "Failed to copy config for WSL2"
         return 1
       fi
       ;;
@@ -131,13 +149,13 @@ main() {
     linux)
       log_info "Native Linux environment detected"
 
-      # Create symlink to Linux version
-      if create_symlink "$DEVCONTAINER_DIR/devcontainer.json.linux"; then
-        log_info "Created symlink to devcontainer.json.linux"
+      # Copy Linux config
+      if copy_config "$DEVCONTAINER_DIR/devcontainer.json.linux"; then
+        log_info "Copied devcontainer.json.linux → devcontainer.json"
         log_info "✅ Setup complete for Linux environment"
         return 0
       else
-        log_error "Failed to create symlink for Linux"
+        log_error "Failed to copy config for Linux"
         return 1
       fi
       ;;
