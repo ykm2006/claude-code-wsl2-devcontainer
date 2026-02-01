@@ -52,11 +52,55 @@ Dev + PyTorch（CUDA）+ sentence-transformers + Qdrant。RAG やナレッジベ
 
 ## デプロイ
 
-開発完了後、設定ファイルは `/workspace/.devcontainer/` にコピーされます。
+開発完了後、`scripts/deploy.sh` で設定ファイルをデプロイできます。
+
+### 基本的な使い方
 
 ```bash
-# デプロイ（T063 で実施予定）
-cp -r .devcontainer/* /workspace/.devcontainer/
+# DevContainer 内から実行（/workspace にデプロイ）
+./scripts/deploy.sh
+
+# ホストから実行（ターゲット指定）
+./scripts/deploy.sh --target ~/WORK
+```
+
+### オプション
+
+| オプション | 説明 |
+|-----------|------|
+| `--target DIR` | デプロイ先ディレクトリを指定 |
+| `--dry-run` | 実行内容を表示（実際には実行しない） |
+| `--rollback` | 最新のバックアップから復元 |
+| `--list` | バックアップ一覧を表示 |
+| `--force` | 確認なしで実行 |
+
+### デプロイされるファイル
+
+```
+TARGET/
+├── .devcontainer/           # DevContainer 設定
+│   ├── docker-compose.yml
+│   ├── README.md
+│   ├── TROUBLESHOOTING.md
+│   ├── minimal/
+│   ├── dev/
+│   ├── dev-rag/
+│   └── shared/
+└── scripts/                 # 環境検出スクリプト
+    ├── code                 # VS Code 起動ラッパー
+    └── setup-devcontainer.sh
+```
+
+### バックアップとロールバック
+
+デプロイ時に既存の設定は自動でバックアップされます（`TARGET/.devcontainer-backups/`）。
+
+```bash
+# バックアップ一覧
+./scripts/deploy.sh --list
+
+# 最新のバックアップから復元
+./scripts/deploy.sh --rollback
 ```
 
 ## 関連 Issue

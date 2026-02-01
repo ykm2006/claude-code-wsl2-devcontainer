@@ -18,9 +18,20 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 SOURCE_DEVCONTAINER="$PROJECT_ROOT/.devcontainer"
 SOURCE_SCRIPTS="$PROJECT_ROOT/scripts"
-TARGET_DEVCONTAINER="/workspace/.devcontainer"
-TARGET_SCRIPTS="/workspace/scripts"
-BACKUP_DIR="/workspace/.devcontainer-backups"
+
+# ターゲットパスの自動検出
+# コンテナ内では /workspace、ホストでは親ディレクトリ
+if [[ -d "/workspace" && -w "/workspace" ]]; then
+    TARGET_BASE="/workspace"
+elif [[ -d "$(dirname "$PROJECT_ROOT")" ]]; then
+    TARGET_BASE="$(dirname "$PROJECT_ROOT")"
+else
+    TARGET_BASE="/workspace"
+fi
+
+TARGET_DEVCONTAINER="${TARGET_BASE}/.devcontainer"
+TARGET_SCRIPTS="${TARGET_BASE}/scripts"
+BACKUP_DIR="${TARGET_BASE}/.devcontainer-backups"
 
 # ヘルパー関数
 info() { echo -e "${BLUE}[INFO]${NC} $1"; }
@@ -42,6 +53,7 @@ usage() {
     echo "Usage: $0 [OPTIONS]"
     echo ""
     echo "Options:"
+    echo "  --target DIR  デプロイ先ディレクトリを指定（デフォルト: 自動検出）"
     echo "  --dry-run     実行内容を表示するだけで実際には実行しない"
     echo "  --rollback    最新のバックアップから復元"
     echo "  --list        バックアップ一覧を表示"
@@ -49,9 +61,14 @@ usage() {
     echo "  -h, --help    このヘルプを表示"
     echo ""
     echo "Examples:"
-    echo "  $0              # 通常デプロイ（確認あり）"
-    echo "  $0 --dry-run    # ドライラン"
-    echo "  $0 --rollback   # ロールバック"
+    echo "  $0                              # 通常デプロイ（確認あり）"
+    echo "  $0 --target ~/WORK              # ターゲット指定でデプロイ"
+    echo "  $0 --dry-run                    # ドライラン"
+    echo "  $0 --rollback                   # ロールバック"
+    echo ""
+    echo "Target detection:"
+    echo "  コンテナ内: /workspace"
+    echo "  ホスト: プロジェクトの親ディレクトリ"
 }
 
 # バックアップ一覧表示
@@ -272,6 +289,17 @@ main() {
 
     while [[ $# -gt 0 ]]; do
         case $1 in
+            --target)
+                if [[ -n "$2" && ! "$2" =~ ^- ]]; then
+                    TARGET_BASE="$2"
+                    TARGET_DEVCONTAINER="${TARGET_BASE}/.devcontainer"
+                    TARGET_SCRIPTS="${TARGET_BASE}/scripts"
+                    BACKUP_DIR="${TARGET_BASE}/.devcontainer-backups"
+                    shift 2
+                else
+                    error "--target には引数が必要です"
+                fi
+                ;;
             --dry-run)
                 dry_run=true
                 shift
