@@ -104,7 +104,10 @@ RUN git clone --depth 1 https://github.com/junegunn/fzf.git /opt/fzf \
 # Node.js LTS
 # =============================================================================
 
-# TODO: #40 - Node.js LTS (v20.x)
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
+    && npm install -g npm@latest \
+    && rm -rf /var/lib/apt/lists/*
 
 # =============================================================================
 # Python (uv)
