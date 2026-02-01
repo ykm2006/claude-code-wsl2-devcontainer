@@ -117,10 +117,11 @@ USER ${USERNAME}
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # =============================================================================
-# Bun
+# Bun (JavaScript/TypeScript runtime)
 # =============================================================================
 
-# TODO: #31 - Bun installation
+USER ${USERNAME}
+RUN curl -fsSL https://bun.sh/install | bash
 
 # =============================================================================
 # Non-root User
