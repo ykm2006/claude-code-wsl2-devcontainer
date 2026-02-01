@@ -46,6 +46,7 @@ Issue には spec.md/plan.md の該当セクションへのリンクを含める
 ### Key Development Principles
 - **Specification-Driven Development**: Use `/specify`, `/plan`, `/tasks` commands
 - **Serena-First Code Analysis**: Leverage Serena MCP for symbol search, references, and refactoring
+- **DevContainer/Docker Best Practices**: Follow community best practices for DevContainer, Docker, and Docker Compose. Use Context7 MCP to retrieve latest documentation when needed.
 - **Parallel Tool Execution**: Run independent operations concurrently to maximize efficiency
 - **Read After Write Protocol**: Always verify file changes with Read tool after Write/Edit
 - **Git-Based Backup**: Use git for version control, no manual backup files
