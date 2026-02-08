@@ -170,7 +170,6 @@ deploy() {
         "docker-compose.yml"
         "README.md"
         "TROUBLESHOOTING.md"
-        "minimal/"
         "dev/"
         "dev-rag/"
         "shared/"
