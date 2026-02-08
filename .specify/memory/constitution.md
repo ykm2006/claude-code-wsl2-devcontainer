@@ -63,7 +63,7 @@ DevContainer 構成は複数の環境（WSL2, Native Linux）で一貫して動�
 
 Docker Compose を使用してサービス分離とスケーラビリティを確保する。
 
-- 各サービス（minimal, dev, rag 等）は独立した Dockerfile を持つ
+- 各サービス（dev, dev-rag 等）は独立した Dockerfile を持つ
 - profiles 機能でオプションサービスを制御
 - DevContainer は Compose サービスを参照（dockerComposeFile 指定）
 - 共通設定は docker-compose.yml のトップレベルで定義
@@ -96,7 +96,7 @@ Docker Compose を使用してサービス分離とスケーラビリティを�
 ### 禁止事項
 
 - グローバル pip install（システム Python 汚染防止）
-- グローバル npm install -g（minimal では Node.js 自体不要）
+- グローバル npm install -g（不要な依存を避ける）
 - ルートでのサービス実行（セキュリティ）
 - 固定 IP / MAC アドレスの想定
 - WSL2 専用または Linux 専用のハードコーディング
@@ -106,12 +106,12 @@ Docker Compose を使用してサービス分離とスケーラビリティを�
 ```
 .devcontainer/
 ├── docker-compose.yml       # サービス定義（必須）
-├── Dockerfile.minimal       # minimal 環境用（必須）
-├── Dockerfile.dev           # dev 環境用（必須）
-├── minimal/
-│   └── devcontainer.json    # minimal 選択時の設定
 ├── dev/
+│   ├── Dockerfile           # dev 環境用（必須）
 │   └── devcontainer.json    # dev 選択時の設定
+├── dev-rag/
+│   ├── Dockerfile           # dev-rag 環境用
+│   └── devcontainer.json    # dev-rag 選択時の設定
 └── shared/                  # 共有設定ファイル（.p10k.zsh 等）
 ```
 
