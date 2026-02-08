@@ -1,5 +1,5 @@
 # DevContainer Multi-Environment Configuration
-# Environments: minimal, dev, dev-rag
+# Environments: dev, dev-rag
 
 # =============================================================================
 # Common Configuration (YAML Anchors)
@@ -18,39 +18,25 @@ x-common-env: &common-env
   LANGUAGE: ja_JP:ja
   LC_ALL: ja_JP.UTF-8
   TERM: xterm-256color
-  GH_TOKEN: ${GH_TOKEN}
+  # gh auth: WSL2 uses GH_TOKEN from pass, KDE uses D-Bus→KWallet (Issue #74, #77)
+  GH_TOKEN: ${GH_TOKEN:-}
+  DBUS_SESSION_BUS_ADDRESS: unix:path=/run/user/1000/bus
 
 # Volume mounts - shared across all environments
 x-volumes: &common-volumes
   - ${HOME}/.claude:/home/node/.claude:cached
   - ${HOME}/.claude.json:/home/node/.claude.json:cached
-  - ${HOME}/.config/gh:/home/node/.config/gh:ro
   - ..:/workspace:cached
+  # D-Bus socket for KWallet access (GH_TOKEN via Secret Service API)
+  - /run/user/1000/bus:/run/user/1000/bus
+  # gh CLI config (read-only, token stays in KWallet)
+  - ${HOME}/.config/gh:/home/node/.config/gh:ro
 
 # =============================================================================
 # Services
 # =============================================================================
 
 services:
-  # Minimal environment - Claude Code only
-  minimal:
-    build:
-      context: .
-      dockerfile: minimal/Dockerfile
-      args:
-        <<: *build-args
-    image: devcontainer-minimal:latest
-    hostname: devcontainer-minimal
-    environment:
-      <<: *common-env
-      DEVCONTAINER_ENV: minimal
-    volumes: *common-volumes
-    working_dir: /workspace
-    user: node
-    tty: true
-    stdin_open: true
-    command: sleep infinity
-
   # Dev environment - Python + Bun
   dev:
     build:
@@ -68,6 +54,9 @@ services:
     user: node
     tty: true
     stdin_open: true
+    # Allow D-Bus communication to host KWallet (Issue #77)
+    security_opt:
+      - apparmor:unconfined
     command: sleep infinity
 
   # Dev-RAG environment - ML/RAG with GPU support
@@ -89,6 +78,9 @@ services:
     user: node
     tty: true
     stdin_open: true
+    # Allow D-Bus communication to host KWallet (Issue #77)
+    security_opt:
+      - apparmor:unconfined
     command: sleep infinity
     profiles:
       - rag
