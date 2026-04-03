@@ -6,11 +6,10 @@
 
 ## 概要
 
-本プロジェクトでは、用途に応じた3つの DevContainer 環境を提供しています。
+本プロジェクトでは、用途に応じた2つの DevContainer 環境を提供しています。
 
 | 環境 | 用途 | サイズ目安 |
 |------|------|-----------|
-| **Minimal** | Claude Code のみの軽量事務作業環境 | ~500MB |
 | **Dev** | Python + Bun のプログラミング開発環境 | ~1.5GB |
 | **Dev-RAG** | RAG/ナレッジベース機能付き開発環境 | ~8GB |
 
@@ -21,14 +20,11 @@
 ```
 .devcontainer/
 ├── docker-compose.yml        # 全サービス定義
-├── Dockerfile.minimal        # Minimal 環境
-├── Dockerfile.dev            # Dev 環境
-├── Dockerfile.dev-rag        # Dev-RAG 環境
-├── minimal/
-│   └── devcontainer.json
 ├── dev/
+│   ├── Dockerfile
 │   └── devcontainer.json
 ├── dev-rag/
+│   ├── Dockerfile
 │   ├── devcontainer.json
 │   └── rag-server/           # 自前RAGサーバー
 └── shared/
@@ -36,27 +32,16 @@
     └── shell-setup.sh
 ```
 
-### Minimal 環境
-
-```
-┌─────────────────────────────────────────┐
-│  Minimal Container                      │
-│  ├─ debian:bookworm-slim ベース          │
-│  ├─ Zsh + Oh My Zsh + Powerlevel10k     │  ← シェル環境
-│  ├─ Git + GitHub CLI (gh)               │  ← バージョン管理
-│  ├─ git-delta + fzf                     │  ← CLI ツール
-│  └─ Claude Code                         │  ← AI アシスタント
-└─────────────────────────────────────────┘
-```
-
-言語ランタイムなし。ドキュメント編集、Git 操作、Claude との対話など軽量な事務作業向け。
-
 ### Dev 環境
 
 ```
 ┌─────────────────────────────────────────┐
 │  Dev Container                          │
-│  ├─ Minimal の全機能                     │
+│  ├─ debian:bookworm-slim ベース          │
+│  ├─ Zsh + Oh My Zsh + Powerlevel10k     │  ← シェル環境
+│  ├─ Git + GitHub CLI (gh)               │  ← バージョン管理
+│  ├─ git-delta + fzf                     │  ← CLI ツール
+│  ├─ Claude Code                         │  ← AI アシスタント
 │  ├─ Python 3.11 + uv                    │  ← Python 開発
 │  ├─ Bun                                 │  ← JavaScript/TypeScript
 │  ├─ build-essential                     │  ← ビルドツール
@@ -200,10 +185,6 @@ VS Code で「Reopen in Container」→ 使いたい環境を選択。
 または CLI から：
 
 ```bash
-# Minimal 環境
-docker compose build minimal
-devcontainer up --config .devcontainer/minimal/devcontainer.json
-
 # Dev 環境
 docker compose build dev
 devcontainer up --config .devcontainer/dev/devcontainer.json
@@ -229,6 +210,49 @@ curl -X POST http://localhost:8000/index \
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
   -d '{"query": "Docker", "top_k": 5}'
+```
+
+### 一括動作確認スクリプト（推奨）
+
+Dev-RAG 環境のすべてのコンポーネントを一括で確認できるスクリプトを用意しています。
+
+```bash
+# Dev-RAG コンテナ内で実行
+bash /workspace/.devcontainer/dev-rag/verify-environment.sh
+```
+
+確認項目：
+- 基本環境（Node.js, Python, uv, Git, gh CLI）
+- GPU / CUDA 認識
+- PyTorch + CUDA 動作
+- sentence-transformers（Embedding 生成テスト含む）
+- Qdrant サーバー接続
+- FastAPI / uvicorn
+
+### GPU / PyTorch の動作確認（手動）
+
+```bash
+# NVIDIA GPU が認識されているか確認
+nvidia-smi
+
+# PyTorch + CUDA の動作確認
+python3 -c "
+import torch
+print(f'PyTorch: {torch.__version__}')
+print(f'CUDA available: {torch.cuda.is_available()}')
+print(f'CUDA version: {torch.version.cuda}')
+if torch.cuda.is_available():
+    print(f'GPU: {torch.cuda.get_device_name(0)}')
+"
+
+# sentence-transformers の動作確認
+python3 -c "
+from sentence_transformers import SentenceTransformer
+model = SentenceTransformer('paraphrase-multilingual-mpnet-base-v2')
+embedding = model.encode('テスト文章')
+print(f'Embedding dimension: {len(embedding)}')
+print('sentence-transformers OK')
+"
 ```
 
 ### Qdrant の動作確認
