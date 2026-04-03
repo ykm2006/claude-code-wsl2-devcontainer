@@ -43,6 +43,19 @@ Establish unified DevContainer configurations across multiple development enviro
 
 Issue には spec.md/plan.md の該当セクションへのリンクを含めることで、「この Issue だけ読めば実装に必要な情報が揃う」状態を作れる。
 
+### DevContainer ファイル運用ルール
+
+このプロジェクトでは **2箇所に同じ `.devcontainer/` が存在する**：
+
+| パス | 役割 |
+|------|------|
+| `/workspace/003-claude-code-wsl2-devcontainer/.devcontainer/` | **ソース（Git 管理）** — 編集はここで行う |
+| `/workspace/.devcontainer/` | **デプロイ先（実稼働）** — `deploy.sh` でコピーされる |
+
+- **編集は必ず 003 リポジトリ側で行うこと**。`/workspace/.devcontainer/` を直接編集すると、次の deploy で上書きされて変更が消える
+- 編集後は `scripts/deploy.sh` を実行して `/workspace/.devcontainer/` に反映する
+- 2つは別ファイル（シンボリックリンクではない）なので、片方を変えてももう片方には反映されない
+
 ### Key Development Principles
 - **Specification-Driven Development**: Use `/specify`, `/plan`, `/tasks` commands
 - **Serena-First Code Analysis**: Leverage Serena MCP for symbol search, references, and refactoring
