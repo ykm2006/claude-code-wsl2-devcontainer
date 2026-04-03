@@ -2,8 +2,8 @@
 # Dev DevContainer - Python + Node.js + Bun development environment
 # Target: < 1.5GB, < 5 min build time
 
-# Base image with pinned digest for reproducibility
-FROM debian:bookworm-slim@sha256:56ff6d36d4eb3db13a741b342ec466f121480b5edded42e4b7ee850ce7a418ee
+# Base image - trixie for GLIBC 2.40 (required by @zenyr/bun-pty, see #78)
+FROM debian:trixie-slim
 
 # Build arguments
 ARG USERNAME=node
@@ -56,7 +56,7 @@ RUN sed -i '/ja_JP.UTF-8/s/^# //g' /etc/locale.gen && locale-gen
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt-get update && apt-get install -y --no-install-recommends \
-    # Python 3.11 (#29)
+    # Python 3.12 (trixie default)
     python3 \
     python3-pip \
     python3-venv \
