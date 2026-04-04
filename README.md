@@ -66,6 +66,7 @@ Dev + PyTorch（CUDA）+ sentence-transformers + Qdrant。RAG やナレッジベ
 | `--rollback` | 最新のバックアップから復元 |
 | `--list` | バックアップ一覧を表示 |
 | `--force` | 確認なしで実行 |
+| `-h, --help` | ヘルプを表示 |
 
 ### デプロイされるファイル
 
@@ -80,7 +81,8 @@ TARGET/
 │   └── shared/
 └── scripts/                 # 環境検出スクリプト
     ├── code                 # VS Code 起動ラッパー
-    └── setup-devcontainer.sh
+    ├── setup-devcontainer.sh
+    └── start-cdp.sh         # Chrome CDP + socat 自動起動
 ```
 
 ### バックアップとロールバック

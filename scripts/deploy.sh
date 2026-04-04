@@ -179,6 +179,7 @@ deploy() {
     local script_files=(
         "code"
         "setup-devcontainer.sh"
+        "start-cdp.sh"
     )
 
     for file in "${devcontainer_files[@]}"; do

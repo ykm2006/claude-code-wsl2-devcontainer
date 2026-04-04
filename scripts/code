@@ -39,6 +39,9 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
+# Start Chrome CDP + socat for E2E testing (skipped on WSL2 / no Chrome)
+bash "$SCRIPT_DIR/start-cdp.sh"
+
 # Call the actual code command with all arguments
 log_info "Launching VS Code..."
 
