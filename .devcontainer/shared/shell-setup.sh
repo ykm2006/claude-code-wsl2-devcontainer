@@ -15,8 +15,9 @@ alias gs='git status'
 alias gd='git diff'
 alias gl='git log --oneline -10'
 
-# Claude Code alias
-alias cc='claude'
+# Claude Code alias (bypass permissions - isolated devcontainer)
+alias claude='claude --dangerously-skip-permissions'
+alias cc='claude --dangerously-skip-permissions'
 
 # FZF configuration
 export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
