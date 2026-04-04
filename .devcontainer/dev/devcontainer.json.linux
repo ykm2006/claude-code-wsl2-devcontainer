@@ -1,0 +1,37 @@
+{
+  "name": "Dev - Python + Bun",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "dev",
+  "workspaceFolder": "/workspace",
+
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "terminal.integrated.profiles.linux": {
+          "zsh": {
+            "path": "/bin/zsh"
+          }
+        },
+        "python.defaultInterpreterPath": "/usr/bin/python3"
+      },
+      "extensions": [
+        "ms-azuretools.vscode-docker",
+        "eamodio.gitlens",
+        "usernamehw.errorlens",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "charliermarsh.ruff",
+        "oven.bun-vscode"
+      ]
+    }
+  },
+
+  "remoteUser": "node",
+  "shutdownAction": "stopCompose",
+
+  "features": {},
+
+  "postCreateCommand": "echo '🐳 Dev environment ready!'",
+  "postStartCommand": ""
+}

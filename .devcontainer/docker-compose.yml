@@ -1,0 +1,123 @@
+# DevContainer Multi-Environment Configuration
+# Environments: dev, dev-rag
+
+# =============================================================================
+# Common Configuration (YAML Anchors)
+# =============================================================================
+
+# Build arguments - shared across all environments
+x-build-args: &build-args
+  USERNAME: node
+  USER_UID: 1000
+  USER_GID: 1000
+
+# Environment variables - shared across all environments
+x-common-env: &common-env
+  TZ: Asia/Tokyo
+  LANG: ja_JP.UTF-8
+  LANGUAGE: ja_JP:ja
+  LC_ALL: ja_JP.UTF-8
+  TERM: xterm-256color
+  # gh auth: WSL2 uses GH_TOKEN from pass, KDE uses D-Bus→KWallet (Issue #74, #77)
+  GH_TOKEN: ${GH_TOKEN:-}
+  DBUS_SESSION_BUS_ADDRESS: unix:path=/run/user/1000/bus
+
+# Volume mounts - shared across all environments
+x-volumes: &common-volumes
+  - ${HOME}/.claude:/home/node/.claude:cached
+  - ${HOME}/.claude.json:/home/node/.claude.json:cached
+  - ..:/workspace:cached
+  # D-Bus socket for KWallet access (GH_TOKEN via Secret Service API)
+  - /run/user/1000/bus:/run/user/1000/bus
+  # gh CLI config (read-only, token stays in KWallet)
+  - ${HOME}/.config/gh:/home/node/.config/gh:ro
+
+# =============================================================================
+# Services
+# =============================================================================
+
+services:
+  # Dev environment - Python + Bun
+  dev:
+    build:
+      context: .
+      dockerfile: dev/Dockerfile
+      args:
+        <<: *build-args
+    image: devcontainer-dev:latest
+    hostname: devcontainer-dev
+    environment:
+      <<: *common-env
+      DEVCONTAINER_ENV: dev
+    volumes: *common-volumes
+    working_dir: /workspace
+    user: node
+    tty: true
+    stdin_open: true
+    # Allow D-Bus communication to host KWallet (Issue #77)
+    security_opt:
+      - apparmor:unconfined
+    command: sleep infinity
+
+  # Dev-RAG environment - ML/RAG with GPU support
+  dev-rag:
+    build:
+      context: .
+      dockerfile: dev-rag/Dockerfile
+      args:
+        <<: *build-args
+    image: devcontainer-dev-rag:latest
+    hostname: devcontainer-dev-rag
+    environment:
+      <<: *common-env
+      DEVCONTAINER_ENV: dev-rag
+      QDRANT_HOST: qdrant
+      QDRANT_PORT: "6333"
+    volumes: *common-volumes
+    working_dir: /workspace
+    user: node
+    tty: true
+    stdin_open: true
+    # Allow D-Bus communication to host KWallet (Issue #77)
+    security_opt:
+      - apparmor:unconfined
+    command: sleep infinity
+    profiles:
+      - rag
+    depends_on:
+      - qdrant
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+  # Qdrant vector database (for RAG)
+  qdrant:
+    image: qdrant/qdrant:latest
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_storage:/qdrant/storage
+    profiles:
+      - rag
+
+# =============================================================================
+# Volumes
+# =============================================================================
+
+volumes:
+  qdrant_storage:
+
+# =============================================================================
+# Notes
+# =============================================================================
+# BuildKit: Enable with environment variables before build:
+#   export DOCKER_BUILDKIT=1
+#   export COMPOSE_DOCKER_CLI_BUILD=1
+#
+# Docker socket mount (if needed for Docker-in-Docker):
+#   Add to volumes: /var/run/docker.sock:/var/run/docker.sock

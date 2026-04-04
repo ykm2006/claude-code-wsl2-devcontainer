@@ -1,0 +1,16 @@
+# RAG Server Dependencies
+# Note: These are pre-installed in the Dockerfile.dev-rag image
+
+# Core
+fastapi>=0.100.0
+uvicorn[standard]>=0.23.0
+
+# Embedding
+torch>=2.0.0
+sentence-transformers>=2.2.0
+
+# Vector Store
+qdrant-client>=1.6.0
+
+# Utilities
+pydantic>=2.0.0

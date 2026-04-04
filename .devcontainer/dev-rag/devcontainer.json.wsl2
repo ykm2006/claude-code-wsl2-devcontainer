@@ -1,0 +1,44 @@
+{
+  "name": "Dev-RAG - ML/RAG Environment (WSL2)",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "dev-rag",
+  "workspaceFolder": "/workspace",
+  "runServices": ["qdrant"],
+
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "terminal.integrated.profiles.linux": {
+          "zsh": {
+            "path": "/bin/zsh"
+          }
+        },
+        "python.defaultInterpreterPath": "/usr/bin/python3"
+      },
+      "extensions": [
+        "ms-azuretools.vscode-docker",
+        "eamodio.gitlens",
+        "usernamehw.errorlens",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "charliermarsh.ruff",
+        "oven.bun-vscode",
+        "ms-toolsai.jupyter"
+      ]
+    }
+  },
+
+  "remoteUser": "node",
+  "shutdownAction": "stopCompose",
+
+  "features": {},
+
+  "mounts": [
+    "source=/mnt/c,target=/mnt/c,type=bind,consistency=cached",
+    "source=/mnt/d,target=/mnt/d,type=bind,consistency=cached"
+  ],
+
+  "postCreateCommand": "echo '🐳 Dev-RAG environment ready! (WSL2)'",
+  "postStartCommand": ""
+}
