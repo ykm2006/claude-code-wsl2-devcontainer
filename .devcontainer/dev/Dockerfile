@@ -104,10 +104,10 @@ RUN git clone --depth 1 https://github.com/junegunn/fzf.git /opt/fzf \
     && /opt/fzf/install --all --no-bash --no-fish --no-update-rc
 
 # =============================================================================
-# Node.js LTS
+# Node.js LTS (22.x - Node 20 は 2026-04 に EOL、npm 12 も非対応)
 # =============================================================================
 
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
     && apt-get install -y nodejs \
     && npm install -g npm@latest \
     && rm -rf /var/lib/apt/lists/*
