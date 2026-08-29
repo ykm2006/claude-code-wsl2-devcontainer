@@ -106,11 +106,12 @@ RUN git clone --depth 1 https://github.com/junegunn/fzf.git /opt/fzf \
 
 # =============================================================================
 # Node.js LTS (22.x - Node 20 は 2026-04 に EOL、npm 12 も非対応)
+# npm はメジャー固定 (npm@12)。latest だと上流の engines 変更でビルドが突然壊れるため
 # =============================================================================
 
 RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
     && apt-get install -y nodejs \
-    && npm install -g npm@latest \
+    && npm install -g npm@12 \
     && rm -rf /var/lib/apt/lists/*
 
 # =============================================================================

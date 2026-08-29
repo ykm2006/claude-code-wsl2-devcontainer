@@ -259,6 +259,21 @@ deploy() {
         done
     fi
 
+    # アクティブな devcontainer.json をデプロイ先の環境に合わせて再生成する
+    # （dev/ dev-rag/ を cp -r するとソース側のアクティブ設定が混入するため）
+    if [[ -x "$TARGET_SCRIPTS/setup-devcontainer.sh" || -f "$TARGET_SCRIPTS/setup-devcontainer.sh" ]]; then
+        info "デプロイ先の環境に合わせて devcontainer.json を再生成中..."
+        if bash "$TARGET_SCRIPTS/setup-devcontainer.sh"; then
+            success "  devcontainer.json を再生成しました"
+        else
+            warn "  devcontainer.json の再生成に失敗しました。"
+            warn "  手動で $TARGET_SCRIPTS/setup-devcontainer.sh を実行してください。"
+        fi
+    else
+        warn "setup-devcontainer.sh が見つかりません。"
+        warn "アクティブな devcontainer.json がソース側の環境設定のままの可能性があります。"
+    fi
+
     echo ""
     success "デプロイ完了！"
     echo ""
